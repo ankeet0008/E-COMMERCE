@@ -1,29 +1,56 @@
-// DummyJSON API service
-// Docs: https://dummyjson.com/docs/products
+import LOCAL_PRODUCTS from './products.js';
 
 const BASE_URL = 'https://dummyjson.com';
 
 /**
- * Fetch all products (paginated, fetches all pages)
+ * Fetch all products (paginated, fetches all pages) with automatic fallback
  */
 export async function fetchAllProducts() {
-  const limit = 30;
-  let skip = 0;
-  let allProducts = [];
-  let total = Infinity;
+  try {
+    const limit = 30;
+    let skip = 0;
+    let allProducts = [];
+    let total = Infinity;
 
-  while (skip < total) {
-    const res = await fetch(
-      `${BASE_URL}/products?limit=${limit}&skip=${skip}&select=id,title,category,price,thumbnail,images,description,sku,stock,weight,dimensions,discountPercentage,rating,brand`
+    // Fetch first batch with timeout
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 6000);
+
+    const firstRes = await fetch(
+      `${BASE_URL}/products?limit=${limit}&skip=0&select=id,title,category,price,thumbnail,images,description,sku,stock,weight,dimensions,discountPercentage,rating,brand`,
+      { signal: controller.signal }
     );
-    if (!res.ok) throw new Error(`API error: ${res.status}`);
-    const data = await res.json();
-    total = data.total;
-    allProducts = allProducts.concat(data.products);
-    skip += limit;
-  }
+    clearTimeout(timeoutId);
 
-  return allProducts.map(normalizeProduct);
+    if (!firstRes.ok) throw new Error(`API error: ${firstRes.status}`);
+    const firstData = await firstRes.json();
+    total = firstData.total;
+    allProducts = firstData.products;
+    skip = limit;
+
+    // Fetch remaining pages in background / sequentially
+    while (skip < total) {
+      const res = await fetch(
+        `${BASE_URL}/products?limit=${limit}&skip=${skip}&select=id,title,category,price,thumbnail,images,description,sku,stock,weight,dimensions,discountPercentage,rating,brand`
+      );
+      if (!res.ok) break;
+      const data = await res.json();
+      allProducts = allProducts.concat(data.products);
+      skip += limit;
+    }
+
+    return allProducts.map(normalizeProduct);
+  } catch (err) {
+    console.warn('DummyJSON API unavailable, loading luxury fallback inventory:', err);
+    return LOCAL_PRODUCTS.map(p => ({
+      ...p,
+      sale: !!p.sale,
+      salePrice: p.salePrice || null,
+      rating: 4.8,
+      brand: 'MAISON ATELIER',
+      images: [p.image]
+    }));
+  }
 }
 
 /**

@@ -9,17 +9,19 @@
 
 /* --- Design Tokens --- */
 :root {
-  --ink: #1B2430;
-  --paper: #F7F4EC;
-  --ochre: #C98A2C;
-  --charcoal: #33342E;
-  --mist: #DAD6C8;
-  --rust-red: #8C3B2E;
-  --ochre-hover: #B07A24;
-  --ink-light: #263242;
-  --paper-dark: #EDEBE3;
-  --font-display: 'Fraunces', serif;
-  --font-body: 'General Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --ink: #141210;
+  --paper: #FAF7F2;
+  --ochre: #C5A059;
+  --charcoal: #24201C;
+  --mist: #E3DDD3;
+  --rust-red: #9B3B2B;
+  --gold: #C5A059;
+  --cashmere: #E8E2D5;
+  --dark-hero: #110F0E;
+  --font-display: 'Cormorant Garamond', 'Playfair Display', serif;
+  --font-serif: 'Cormorant Garamond', serif;
+  --font-sans: 'Montserrat', sans-serif;
+  --font-body: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-mono: 'IBM Plex Mono', monospace;
   --space-xs: 0.25rem;
   --space-sm: 0.5rem;
@@ -29,10 +31,10 @@
   --space-2xl: 3rem;
   --space-3xl: 4rem;
   --space-4xl: 6rem;
-  --container-max: 1280px;
-  --container-padding: 1.5rem;
-  --grid-gap: 1.25rem;
-  --border-radius: 3px;
+  --container-max: 1360px;
+  --container-padding: 2rem;
+  --grid-gap: 1.5rem;
+  --border-radius: 4px;
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --duration-fast: 150ms;
   --duration-normal: 300ms;
@@ -334,3 +336,707 @@ ul, ol { list-style: none; }
    ============================================================ */
 .directory__row-image { width: 48px; height: 48px; border-radius: var(--border-radius); overflow: hidden; background-color: var(--paper-dark); flex-shrink: 0; }
 .directory__row-image img { width: 100%; height: 100%; object-fit: contain; mix-blend-mode: multiply; }
+
+/* ============================================================
+   ULTRA-LUXURY MAISON ATELIER STYLES (Brunello Cucinelli Style)
+   ============================================================ */
+
+/* --- Luxury Header --- */
+.luxury-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(16, 14, 12, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  transition: all 0.3s ease;
+}
+.luxury-header__inner {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 2rem;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.luxury-header__left { flex: 1; }
+.luxury-header__menu-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: #FAF7F2;
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  transition: opacity 0.2s;
+}
+.luxury-header__menu-btn:hover { opacity: 0.7; }
+.luxury-header__menu-icon {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: 18px;
+}
+.luxury-header__menu-icon span {
+  display: block;
+  width: 100%;
+  height: 1px;
+  background-color: #FAF7F2;
+}
+
+.luxury-header__center {
+  text-align: center;
+}
+.luxury-header__brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #FAF7F2;
+}
+.luxury-header__crest {
+  width: 22px;
+  height: 22px;
+  color: var(--gold);
+  margin-bottom: 4px;
+}
+.luxury-header__title {
+  font-family: 'Cinzel', serif;
+  font-size: 1.15rem;
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  color: #FAF7F2;
+  line-height: 1;
+}
+.luxury-header__subtitle {
+  font-family: var(--font-sans);
+  font-size: 0.58rem;
+  letter-spacing: 0.35em;
+  color: var(--gold);
+  margin-top: 3px;
+  opacity: 0.85;
+}
+
+.luxury-header__right {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1.5rem;
+}
+.luxury-header__action-btn {
+  color: #FAF7F2;
+  opacity: 0.85;
+  transition: opacity 0.2s;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.luxury-header__action-btn:hover { opacity: 1; color: var(--gold); }
+.luxury-header__bag-count {
+  position: absolute;
+  top: -6px;
+  right: -8px;
+  background: var(--gold);
+  color: #110F0E;
+  font-family: var(--font-sans);
+  font-size: 0.62rem;
+  font-weight: 700;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Nav Overlay */
+.luxury-nav-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  background: rgba(10, 9, 8, 0.85);
+  backdrop-filter: blur(20px);
+  display: flex;
+  justify-content: flex-start;
+  animation: fadeIn 0.3s ease;
+}
+.luxury-nav-overlay__content {
+  width: 100%;
+  max-width: 480px;
+  background: #161412;
+  height: 100%;
+  padding: 3rem 2.5rem;
+  border-right: 1px solid rgba(255,255,255,0.1);
+  display: flex;
+  flex-direction: column;
+}
+.luxury-nav-overlay__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  letter-spacing: 0.25em;
+  color: var(--gold);
+  margin-bottom: 3rem;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  padding-bottom: 1rem;
+}
+.luxury-nav-overlay__links {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+.luxury-nav-overlay__links a {
+  font-family: var(--font-serif);
+  font-size: 1.6rem;
+  color: #FAF7F2;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  transition: color 0.2s, transform 0.2s;
+}
+.luxury-nav-overlay__links a span {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  color: var(--gold);
+}
+.luxury-nav-overlay__links a:hover {
+  color: var(--gold);
+  transform: translateX(8px);
+}
+
+/* Search Bar Top */
+.luxury-search-bar {
+  background: #1A1715;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  padding: 1.25rem 0;
+  animation: slideDown 0.3s ease;
+}
+.luxury-search-bar__form {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.luxury-search-bar__form input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(255,255,255,0.2);
+  color: #FAF7F2;
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  padding: 8px 0;
+  outline: none;
+}
+.luxury-search-bar__form button {
+  color: var(--gold);
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+}
+
+/* --- Luxury Hero Section --- */
+.luxury-hero {
+  position: relative;
+  width: 100%;
+  height: 92vh;
+  min-height: 720px;
+  background-color: #12100E;
+  color: #FAF7F2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  overflow: hidden;
+  padding-top: 30px;
+  padding-bottom: 15px;
+}
+
+/* Background Grid Wall */
+.luxury-hero__bg-grid {
+  position: absolute;
+  inset: 0;
+  opacity: 0.15;
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.18) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.18) 1px, transparent 1px);
+  background-size: 70px 70px;
+  pointer-events: none;
+}
+.luxury-hero__vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, transparent 20%, rgba(14, 12, 10, 0.9) 95%);
+  pointer-events: none;
+}
+
+/* Carousel 3D Track */
+.luxury-hero__carousel-container {
+  position: relative;
+  z-index: 5;
+  width: 100%;
+  max-width: 1280px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1rem;
+}
+.luxury-hero__nav-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(35, 30, 26, 0.65);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #FAF7F2;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 20;
+  transition: all 0.25s ease;
+}
+.luxury-hero__nav-btn:hover {
+  background: var(--gold);
+  color: #110E0D;
+  transform: scale(1.1);
+}
+
+.luxury-hero__track {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  width: 100%;
+  padding: 1rem 0;
+}
+.luxury-hero__card {
+  width: 185px;
+  height: 285px;
+  border-radius: 6px;
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.5s ease, border-color 0.4s ease, box-shadow 0.5s ease;
+  opacity: 0.4;
+  filter: brightness(0.7);
+}
+.luxury-hero__card-image-wrap {
+  width: 100%;
+  height: 100%;
+}
+.luxury-hero__card-image-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s ease;
+}
+
+.luxury-hero__card.is-active {
+  width: 260px;
+  height: 380px;
+  opacity: 1;
+  filter: brightness(1.08);
+  z-index: 10;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.85);
+  transform: translateY(-8px) scale(1.05);
+}
+.luxury-hero__card.is-prev,
+.luxury-hero__card.is-next {
+  width: 205px;
+  height: 310px;
+  opacity: 0.8;
+  filter: brightness(0.85);
+  z-index: 5;
+}
+.luxury-hero__card.is-far {
+  opacity: 0.25;
+  transform: scale(0.85);
+}
+
+/* Editorial Content */
+.luxury-hero__content {
+  position: relative;
+  z-index: 10;
+  text-align: center;
+  margin-top: 0.5rem;
+}
+.luxury-hero__title {
+  font-family: var(--font-serif);
+  font-size: clamp(2.4rem, 4.5vw, 4.2rem);
+  font-weight: 300;
+  color: #FAF7F2;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  text-shadow: 0 4px 24px rgba(0,0,0,0.8);
+}
+.luxury-hero__title em {
+  font-style: italic;
+  font-weight: 400;
+  color: #F5E8D3;
+}
+.luxury-hero__subtitle {
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: rgba(250, 247, 242, 0.7);
+  margin-top: 0.75rem;
+}
+
+/* Bottom Controls */
+.luxury-hero__bottom-bar {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 1280px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2rem;
+  margin-top: 1rem;
+}
+.luxury-hero__scroll-btn {
+  background: rgba(32, 28, 24, 0.75);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 50px;
+  padding: 10px 22px;
+  color: #FAF7F2;
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.25s ease;
+}
+.luxury-hero__scroll-btn:hover {
+  background: rgba(45, 40, 35, 0.9);
+  border-color: var(--gold);
+}
+
+.luxury-hero__concierge-pill {
+  background: rgba(28, 24, 21, 0.8);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 50px;
+  padding: 6px 8px 6px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
+}
+.luxury-hero__pill-add {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.08);
+  color: rgba(255,255,255,0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  transition: background 0.2s;
+}
+.luxury-hero__concierge-pill input {
+  width: 320px;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #FAF7F2;
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
+}
+.luxury-hero__concierge-pill input::placeholder {
+  color: rgba(255, 255, 255, 0.45);
+}
+.luxury-hero__pill-submit {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--gold);
+  color: #110E0D;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s;
+}
+.luxury-hero__pill-submit:hover { transform: scale(1.08); }
+
+.luxury-hero__footer-tag {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 1280px;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 2rem;
+  font-family: var(--font-sans);
+  font-size: 0.58rem;
+  letter-spacing: 0.2em;
+  color: rgba(255,255,255,0.35);
+  text-transform: uppercase;
+}
+
+/* --- Luxury Showcase & Categories --- */
+.luxury-main {
+  background-color: #FAF7F2;
+  color: #1D1A17;
+}
+.luxury-showcase {
+  padding: 6rem 2rem 4rem 2rem;
+}
+.luxury-section-title {
+  text-align: center;
+  margin-bottom: 3.5rem;
+}
+.luxury-section-title__tag {
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+  color: var(--gold);
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+.luxury-section-title__heading {
+  font-family: var(--font-serif);
+  font-size: 2.8rem;
+  font-weight: 300;
+  color: #1A1715;
+}
+
+.luxury-categories-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+.luxury-category-card {
+  position: relative;
+  height: 420px;
+  border-radius: 4px;
+  overflow: hidden;
+  display: block;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+}
+.luxury-category-card__img-wrap {
+  width: 100%;
+  height: 100%;
+}
+.luxury-category-card__img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.8s cubic-bezier(0.2, 1, 0.3, 1);
+}
+.luxury-category-card:hover .luxury-category-card__img-wrap img {
+  transform: scale(1.08);
+}
+.luxury-category-card__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(16, 14, 12, 0.85) 0%, transparent 60%);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 2rem;
+  color: #FAF7F2;
+}
+.luxury-category-card__num {
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  color: var(--gold);
+}
+.luxury-category-card__name {
+  font-family: var(--font-serif);
+  font-size: 1.8rem;
+  font-weight: 300;
+  margin-top: 4px;
+}
+.luxury-category-card__count {
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  opacity: 0.75;
+  margin-top: 4px;
+}
+
+/* --- Featured Rails --- */
+.luxury-rails {
+  padding-bottom: 6rem;
+}
+.luxury-rail-block {
+  margin-bottom: 4rem;
+}
+.luxury-rail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid var(--mist);
+  padding-bottom: 1rem;
+}
+.luxury-rail-header__tag {
+  font-family: var(--font-sans);
+  font-size: 0.65rem;
+  letter-spacing: 0.25em;
+  color: var(--gold);
+}
+.luxury-rail-header__title {
+  font-family: var(--font-serif);
+  font-size: 2.2rem;
+  font-weight: 300;
+  color: #1A1715;
+}
+.luxury-rail-header__link {
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  letter-spacing: 0.15em;
+  color: #1A1715;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+.luxury-rail-header__link:hover { color: var(--gold); }
+
+.luxury-rail-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1.5rem;
+}
+
+/* --- Luxury Product Card --- */
+.luxury-product-card {
+  position: relative;
+  background: #FFFFFF;
+  border: 1px solid rgba(227, 221, 211, 0.6);
+  border-radius: 4px;
+  overflow: hidden;
+  transition: all 0.35s ease;
+}
+.luxury-product-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 18px 40px rgba(0,0,0,0.08);
+  border-color: var(--gold);
+}
+.luxury-product-card__badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 5;
+  background: #110F0E;
+  color: var(--gold);
+  font-family: var(--font-sans);
+  font-size: 0.62rem;
+  letter-spacing: 0.15em;
+  padding: 4px 8px;
+  border-radius: 2px;
+}
+.luxury-product-card__img-container {
+  display: block;
+  position: relative;
+  height: 280px;
+  background: #F5F2EC;
+  overflow: hidden;
+}
+.luxury-product-card__img-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s ease;
+}
+.luxury-product-card:hover .luxury-product-card__img-container img {
+  transform: scale(1.06);
+}
+
+.luxury-product-card__quick-add {
+  position: absolute;
+  inset: auto 0 0 0;
+  padding: 1rem;
+  background: linear-gradient(to top, rgba(16, 14, 12, 0.7), transparent);
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.3s ease;
+}
+.luxury-product-card:hover .luxury-product-card__quick-add {
+  opacity: 1;
+  transform: translateY(0);
+}
+.luxury-product-card__quick-add button {
+  width: 100%;
+  background: #FAF7F2;
+  color: #110F0E;
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  padding: 10px;
+  border-radius: 2px;
+  transition: background 0.2s;
+}
+.luxury-product-card__quick-add button:hover {
+  background: var(--gold);
+}
+
+.luxury-product-card__meta {
+  padding: 1.25rem;
+}
+.luxury-product-card__brand {
+  font-family: var(--font-sans);
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  color: var(--gold);
+  text-transform: uppercase;
+}
+.luxury-product-card__title {
+  font-family: var(--font-serif);
+  font-size: 1.2rem;
+  font-weight: 400;
+  color: #1A1715;
+  margin: 4px 0 8px 0;
+  line-height: 1.25;
+}
+.luxury-product-card__price {
+  font-family: var(--font-sans);
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: #1A1715;
+}
+.luxury-product-card__price--old {
+  text-decoration: line-through;
+  opacity: 0.4;
+  margin-right: 8px;
+  font-size: 0.8rem;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes slideDown {
+  from { transform: translateY(-100%); }
+  to { transform: translateY(0); }
+}
+
+@media (max-width: 768px) {
+  .luxury-hero__track { gap: 0.5rem; }
+  .luxury-hero__card { width: 130px; height: 200px; }
+  .luxury-hero__card.is-active { width: 170px; height: 260px; }
+  .luxury-hero__title { font-size: 2rem; }
+  .luxury-hero__concierge-pill input { width: 180px; }
+}
+
