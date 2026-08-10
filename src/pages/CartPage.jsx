@@ -11,12 +11,8 @@ export default function CartPage() {
   const [couponInput, setCouponInput] = useState('');
   const [couponError, setCouponError] = useState(false);
   const count = getCount();
-  
-  const { subtotal, discountAmount, gstAmount, shipping, grandTotal } = getCartTotals(products);
 
-  const now = new Date();
-  const dateStr = now.toLocaleDateString('en-US', { day: '2-digit', month: 'short', year: 'numeric' }).toUpperCase();
-  const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+  const { subtotal, discountAmount, gstAmount, shipping, grandTotal } = getCartTotals(products);
 
   const handleApplyCoupon = (e) => {
     e.preventDefault();
@@ -33,127 +29,137 @@ export default function CartPage() {
   if (loading) return <main><Spinner /></main>;
 
   return (
-    <main>
+    <main className="royal-cart-container">
       <div className="container">
-        <div className="page-heading">
-          <h1 className="page-heading__title">Your bag</h1>
-          <p className="page-heading__sub">
-            {count === 0 ? 'No items' : `${count} item${count !== 1 ? 's' : ''}`}
-          </p>
-        </div>
+        <div className="royal-ledger">
+          <div className="royal-ledger__header">
+            <h1 className="royal-ledger__title">Ledger of Reserved Pieces</h1>
+            <p className="royal-ledger__subtitle">
+              {count === 0 ? 'No lots reserved' : `${count} Lot${count !== 1 ? 's' : ''} currently held for acquisition`}
+            </p>
+          </div>
 
-        <div style={{ paddingBottom: 'var(--space-4xl)' }}>
           {items.length === 0 ? (
-            <div className="receipt">
-              <div className="receipt__empty">
-                <p className="receipt__empty-text">
-                  Nothing here yet — browse the directory to find something.
-                </p>
-                <Link to="/" className="btn btn--primary">Browse the directory</Link>
-              </div>
-              <div className="receipt__torn-edge" />
+            <div style={{ textAlign: 'center', padding: '3rem 0' }}>
+              <p style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontSize: '1.1rem', marginBottom: '2rem' }}>
+                Your private registry is empty. Explore our galleries to select pieces.
+              </p>
+              <Link to="/browse" className="royal-hero__cta">
+                Browse The Galleries
+              </Link>
             </div>
           ) : (
-            <div className="receipt">
-              <div className="receipt__header">
-                <div className="receipt__store-name">The General Store</div>
-                <div className="receipt__date">{dateStr} · {timeStr}</div>
-              </div>
-
-              <div className="receipt__items">
+            <div>
+              {/* Reserved Item List */}
+              <div style={{ marginBottom: '2.5rem' }}>
                 {items.map(item => {
                   const product = getProduct(item.id);
                   if (!product) return null;
                   const price = product.sale ? product.salePrice : product.price;
 
                   return (
-                    <div key={item.id} className="receipt__item">
+                    <div key={item.id} className="royal-ledger__item">
                       <div>
-                        <span className="receipt__item-name">{product.name}</span>
+                        <div className="royal-ledger__item-name">{product.name}</div>
                         <button
-                          className="receipt__item-remove"
+                          className="royal-ledger__item-remove"
                           onClick={() => removeItem(product.id)}
                         >
-                          remove
+                          Release Hold ×
                         </button>
                       </div>
-                      <div className="receipt__item-qty">
-                        <button
-                          className="receipt__item-qty-btn"
+
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <button 
                           onClick={() => updateQty(product.id, item.qty - 1)}
-                          aria-label="Decrease quantity"
+                          style={{ padding: '2px 8px', border: '1px solid var(--parchment)' }}
                         >
                           −
                         </button>
-                        <span className="receipt__item-qty-value">{item.qty}</span>
-                        <button
-                          className="receipt__item-qty-btn"
+                        <span style={{ fontFamily: 'var(--font-sans)', fontSize: '0.88rem', fontWeight: 600 }}>{item.qty}</span>
+                        <button 
                           onClick={() => updateQty(product.id, item.qty + 1)}
-                          aria-label="Increase quantity"
+                          style={{ padding: '2px 8px', border: '1px solid var(--parchment)' }}
                         >
                           +
                         </button>
                       </div>
-                      <span className="receipt__item-price">{formatPrice(price * item.qty)}</span>
+
+                      <div style={{ textAlignment: 'right', fontFamily: 'var(--font-serif)', fontSize: '1.1rem', fontWeight: 600 }}>
+                        {formatPrice(price * item.qty)}
+                      </div>
                     </div>
                   );
                 })}
               </div>
 
-              <div className="receipt__totals">
-                <div style={{ paddingBottom: 'var(--space-md)', marginBottom: 'var(--space-md)', borderBottom: '1px dotted var(--mist)' }}>
-                  {coupon ? (
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8125rem' }}>
-                        Coupon applied: <strong>{coupon}</strong>
-                      </div>
-                      <button className="receipt__item-remove" onClick={removeCoupon} style={{ marginLeft: 0 }}>Remove</button>
-                    </div>
-                  ) : (
-                    <form onSubmit={handleApplyCoupon} style={{ display: 'flex', gap: '8px' }}>
-                      <input 
-                        type="text" 
-                        value={couponInput}
-                        onChange={e => { setCouponInput(e.target.value); setCouponError(false); }}
-                        placeholder="Discount code" 
-                        className="form-input" 
-                        style={{ flex: 1, padding: '6px 10px', fontSize: '0.8125rem' }} 
-                      />
-                      <button type="submit" className="btn btn--primary" style={{ padding: '6px 14px' }}>Apply</button>
-                    </form>
-                  )}
-                  {couponError && <div style={{ color: 'var(--rust-red)', fontSize: '0.75rem', marginTop: '4px' }}>Invalid coupon code</div>}
-                </div>
+              {/* Coupon Code Section */}
+              <div style={{ padding: '1.5rem', background: 'var(--parchment)', marginBottom: '2rem', borderRadius: '2px' }}>
+                {coupon ? (
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <span style={{ fontFamily: 'var(--font-sans)', fontSize: '0.75rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--smoke)' }}>
+                      WARRANT PROMO APPLIED: <strong>{coupon}</strong>
+                    </span>
+                    <button onClick={removeCoupon} className="royal-ledger__item-remove" style={{ marginTop: 0 }}>Remove</button>
+                  </div>
+                ) : (
+                  <form onSubmit={handleApplyCoupon} style={{ display: 'flex', gap: '10px' }}>
+                    <input 
+                      type="text"
+                      placeholder="Enter Royal Warrant / Discount Code (e.g. DIS23)"
+                      value={couponInput}
+                      onChange={e => { setCouponInput(e.target.value); setCouponError(false); }}
+                      style={{ flex: 1, padding: '8px 12px', border: '1px solid var(--smoke)', background: '#FFF', fontFamily: 'var(--font-sans)', fontSize: '0.8rem', outline: 'none' }}
+                    />
+                    <button type="submit" style={{ background: 'var(--emerald-dark)', color: 'var(--ivory)', padding: '8px 18px', fontFamily: 'var(--font-sans)', fontSize: '0.72rem', letterSpacing: '0.18em', textTransform: 'uppercase' }}>
+                      Apply Code
+                    </button>
+                  </form>
+                )}
+                {couponError && <div style={{ color: 'var(--burgundy)', fontSize: '0.75rem', marginTop: '6px' }}>Invalid warrant code</div>}
+              </div>
 
-                <div className="receipt__total-row">
-                  <span>Subtotal</span>
+              {/* Totals Breakdown */}
+              <div style={{ borderTop: '1px solid var(--parchment)', paddingTop: '1.5rem' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 0', fontFamily: 'var(--font-serif)' }}>
+                  <span>Subtotal Valuation</span>
                   <span>{formatPrice(subtotal)}</span>
                 </div>
+
                 {discountAmount > 0 && (
-                  <div className="receipt__total-row" style={{ color: 'var(--rust-red)' }}>
-                    <span>Discount</span>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 0', color: 'var(--burgundy)', fontFamily: 'var(--font-serif)' }}>
+                    <span>Warrant Exemption (Discount)</span>
                     <span>-{formatPrice(discountAmount)}</span>
                   </div>
                 )}
-                <div className="receipt__total-row">
-                  <span>GST (18%)</span>
+
+                <div style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 0', fontFamily: 'var(--font-serif)' }}>
+                  <span>Statutory Duty (GST 18%)</span>
                   <span>{formatPrice(gstAmount)}</span>
                 </div>
-                <div className="receipt__total-row">
-                  <span>Shipping</span>
-                  <span>{shipping === 0 ? 'Free' : formatPrice(shipping)}</span>
+
+                <div style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 0', fontFamily: 'var(--font-serif)' }}>
+                  <span>Royal Carriage Delivery</span>
+                  <span>{shipping === 0 ? 'Complimentary (Over ₹2,000)' : formatPrice(shipping)}</span>
                 </div>
-                <div className="receipt__total-row receipt__total-row--grand">
-                  <span>Total</span>
+
+                <div style={{ display: 'flex', justifyContent: 'space-between', padding: '16px 0 0 0', borderTop: '1px solid var(--smoke)', marginTop: '12px', fontFamily: 'var(--font-crest)', fontSize: '1.4rem', fontWeight: 600 }}>
+                  <span>Total Acquisition Valuation</span>
                   <span>{formatPrice(grandTotal)}</span>
                 </div>
               </div>
 
-              <div className="receipt__actions">
-                <Link to="/checkout" className="btn btn--primary btn--full">Check out</Link>
-                <Link to="/" className="receipt__continue">Continue browsing</Link>
+              {/* Checkout Action */}
+              <div style={{ marginTop: '2.5rem' }}>
+                <Link to="/checkout" className="royal-lot-cta" style={{ display: 'block', textAlign: 'center' }}>
+                  Proceed To Private Checkout & Dispatch
+                </Link>
+                <div style={{ textAlign: 'center', marginTop: '1rem' }}>
+                  <Link to="/browse" style={{ fontFamily: 'var(--font-sans)', fontSize: '0.68rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--smoke)', opacity: 0.7 }}>
+                    ← Continue Examining Galleries
+                  </Link>
+                </div>
               </div>
-              <div className="receipt__torn-edge" />
             </div>
           )}
         </div>

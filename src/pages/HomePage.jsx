@@ -1,237 +1,153 @@
-import { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useProducts } from '../data/ProductsContext';
 import ProductCard from '../components/ProductCard';
 import Spinner from '../components/Spinner';
 
-// Editorial fallback slides for the luxury hero carousel
-const LUXURY_SLIDES = [
-  {
-    id: 101,
-    title: 'The Tailored Suit',
-    subtitle: 'Autumn-Winter 2026 Collection',
-    image: 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&w=800&q=80',
-    category: 'Menswear'
-  },
-  {
-    id: 102,
-    title: 'High-Neck Cashmere Knit',
-    subtitle: 'Pure Italian Thread',
-    image: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=800&q=80',
-    category: 'Womenswear'
-  },
-  {
-    id: 103,
-    title: 'Evening Formal Ensemble',
-    subtitle: 'Handcrafted Atelier Series',
-    image: 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=800&q=80',
-    category: 'Haute Couture'
-  },
-  {
-    id: 104,
-    title: 'Suede Outerwear & Denim',
-    subtitle: 'Urban Atelier Essentials',
-    image: 'https://images.unsplash.com/photo-1516826957135-700dedea698c?auto=format&fit=crop&w=800&q=80',
-    category: 'Outerwear'
-  },
-  {
-    id: 105,
-    title: 'Textured Wool Wrap',
-    subtitle: 'Artisanal Weave',
-    image: 'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=800&q=80',
-    category: 'Accessories'
-  }
-];
-
 export default function HomePage() {
   const { products, categories, loading, error } = useProducts();
-  const [activeSlide, setActiveSlide] = useState(2); // Center slide initially
-  const [promptText, setPromptText] = useState('');
-  const navigate = useNavigate();
-
-  // Combine API product thumbnails into luxury slide deck if available
-  const carouselItems = products.length >= 5
-    ? products.slice(0, 5).map((p, idx) => ({
-        id: p.id,
-        title: p.name,
-        subtitle: p.brand || p.category,
-        image: p.images[0] || p.image,
-        category: p.category
-      }))
-    : LUXURY_SLIDES;
-
-  const handlePrev = () => {
-    setActiveSlide((prev) => (prev === 0 ? carouselItems.length - 1 : prev - 1));
-  };
-
-  const handleNext = () => {
-    setActiveSlide((prev) => (prev === carouselItems.length - 1 ? 0 : prev + 1));
-  };
-
-  const handlePromptSubmit = (e) => {
-    e.preventDefault();
-    if (promptText.trim()) {
-      navigate(`/browse?q=${encodeURIComponent(promptText.trim())}`);
-    }
-  };
 
   if (loading) return <main><Spinner /></main>;
+  if (error) return (
+    <main style={{ padding: '6rem 0', textAlign: 'center' }}>
+      <p style={{ fontFamily: 'var(--font-serif)', color: 'var(--ivory)', opacity: 0.8 }}>
+        The Royal Registry is temporarily unaccessible — {error}
+      </p>
+    </main>
+  );
 
-  const featuredCategories = categories.slice(0, 4);
+  // Pick hero product
+  const heroProduct = products[0] || {
+    id: 1,
+    name: 'Hand-Engraved Brass Pocket Chronometer',
+    category: 'The Study',
+    image: 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=1200&q=80'
+  };
+
+  // Rooms definition
+  const rooms = categories.slice(0, 4).map((cat, idx) => {
+    const catProducts = products.filter(p => p.category === cat.name);
+    const roomImg = catProducts[0]?.images[0] || catProducts[0]?.image || 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=800&q=80';
+    return {
+      num: `CHAMBER 0${idx + 1}`,
+      name: cat.name,
+      count: cat.totalStock,
+      image: roomImg
+    };
+  });
 
   return (
-    <main className="luxury-main">
+    <main>
       {/* ============================================================
-          LUXURY HERO SECTION (Brunello Cucinelli Inspired)
+          HERO — FULL BLEED CINEMATIC WITH HERALDIC CREST
           ============================================================ */}
-      <section className="luxury-hero">
-        {/* Grid Wall Background Texture */}
-        <div className="luxury-hero__bg-grid"></div>
-        <div className="luxury-hero__vignette"></div>
+      <section className="royal-hero">
+        <img 
+          src={heroProduct.images ? heroProduct.images[0] : heroProduct.image} 
+          alt="Royal Emporium Hero Exhibit" 
+          className="royal-hero__bg-image"
+        />
+        <div className="royal-hero__vignette"></div>
 
-        {/* Floating Interactive Product Track */}
-        <div className="luxury-hero__carousel-container">
-          <button 
-            className="luxury-hero__nav-btn luxury-hero__nav-btn--prev"
-            onClick={handlePrev}
-            aria-label="Previous Item"
-          >
-            ‹
-          </button>
+        <div className="royal-hero__content">
+          {/* Centered Crest Anchor Mark */}
+          <svg className="royal-hero__crest-hero" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M25 4L32 16H18L25 4Z" fill="currentColor"/>
+            <path d="M12 21H38V24H12V21Z" fill="currentColor"/>
+            <path d="M15 26H35V45H15V26Z" stroke="currentColor" strokeWidth="1.8"/>
+            <path d="M20 34C20 31.2386 22.2386 29 25 29C27.7614 29 30 31.2386 30 34V45H20V34Z" fill="currentColor" fillOpacity="0.2" stroke="currentColor" strokeWidth="1.5"/>
+            <circle cx="25" cy="11" r="2" fill="currentColor"/>
+          </svg>
 
-          <div className="luxury-hero__track">
-            {carouselItems.map((item, index) => {
-              // Calculate offset from center active card
-              const offset = index - activeSlide;
-              let classNames = 'luxury-hero__card';
-              if (offset === 0) classNames += ' is-active';
-              else if (offset === -1 || (activeSlide === 0 && index === carouselItems.length - 1)) classNames += ' is-prev';
-              else if (offset === 1 || (activeSlide === carouselItems.length - 1 && index === 0)) classNames += ' is-next';
-              else classNames += ' is-far';
+          <span className="royal-hero__warrant-tag">
+            By Appointment to the Royal Court · Est. 1884
+          </span>
 
-              return (
-                <div 
-                  key={item.id} 
-                  className={classNames}
-                  onClick={() => setActiveSlide(index)}
-                >
-                  <div className="luxury-hero__card-image-wrap">
-                    <img src={item.image} alt={item.title} />
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-
-          <button 
-            className="luxury-hero__nav-btn luxury-hero__nav-btn--next"
-            onClick={handleNext}
-            aria-label="Next Item"
-          >
-            ›
-          </button>
-        </div>
-
-        {/* Hero Editorial Headlines */}
-        <div className="luxury-hero__content">
-          <h1 className="luxury-hero__title">
-            Where ideas become endless <br />
-            <em>possibilities</em>
+          <h1 className="royal-hero__title">
+            Objects of Exceptional <em>Provenance & Craft</em>
           </h1>
-          <p className="luxury-hero__subtitle">
-            Welcome to the AI Online Boutique
+
+          <p className="royal-hero__subtitle">
+            A private emporium stocking curated collections across apothecary, leatherware, fine stationery, and maison objects — offered in limited releases.
           </p>
-        </div>
 
-        {/* Bottom Luxury Control & Search Concierge Bar */}
-        <div className="luxury-hero__bottom-bar">
-          <button 
-            className="luxury-hero__scroll-btn"
-            onClick={() => window.scrollTo({ top: window.innerHeight * 0.85, behavior: 'smooth' })}
-          >
-            <span className="luxury-hero__scroll-arrow">↓</span> Scroll to explore
-          </button>
-
-          {/* Glassmorphic Search / Concierge Input Pill */}
-          <form className="luxury-hero__concierge-pill" onSubmit={handlePromptSubmit}>
-            <button type="button" className="luxury-hero__pill-add" title="Add Filter">+</button>
-            <input 
-              type="text" 
-              placeholder="I need an outfit for a movie premiere..." 
-              value={promptText}
-              onChange={(e) => setPromptText(e.target.value)}
-            />
-            <button type="submit" className="luxury-hero__pill-submit" title="Search Concierge">
-              ↑
-            </button>
-          </form>
-        </div>
-
-        {/* Subtle Footer watermark line */}
-        <div className="luxury-hero__footer-tag">
-          <span>© 2026 BRUNELLO CUCINELLI SPA ATELIER</span>
-          <span>THIS WEBSITE RUNS ON BOUTIQUE AI ENGINE</span>
+          <Link to="/browse" className="royal-hero__cta">
+            Explore The Galleries <span>→</span>
+          </Link>
         </div>
       </section>
 
       {/* ============================================================
-          LUXURY CATEGORY SHOWCASE
+          ROOMS OF THE EMPORIUM (CHAMBERS)
           ============================================================ */}
-      <section className="luxury-showcase container">
-        <div className="luxury-section-title">
-          <span className="luxury-section-title__tag">CURATED DEPARTMENTS</span>
-          <h2 className="luxury-section-title__heading">The Italian Heritage Collection</h2>
+      <section className="container royal-rooms">
+        <div className="royal-section-header">
+          <span className="royal-section-header__tag">BY APPOINTMENT</span>
+          <h2 className="royal-section-header__title">The Chambers of the Emporium</h2>
         </div>
 
-        <div className="luxury-categories-grid">
-          {categories.map((cat, idx) => {
-            const catProducts = products.filter(p => p.category === cat.name);
-            const firstImg = catProducts[0]?.images[0] || catProducts[0]?.image || LUXURY_SLIDES[idx % LUXURY_SLIDES.length].image;
-            return (
-              <Link 
-                to={`/browse?category=${encodeURIComponent(cat.name)}`} 
-                key={cat.name} 
-                className="luxury-category-card"
-              >
-                <div className="luxury-category-card__img-wrap">
-                  <img src={firstImg} alt={cat.name} loading="lazy" />
-                </div>
-                <div className="luxury-category-card__overlay">
-                  <span className="luxury-category-card__num">0{idx + 1}</span>
-                  <h3 className="luxury-category-card__name">{cat.name}</h3>
-                  <span className="luxury-category-card__count">{cat.totalStock} Available</span>
-                </div>
-              </Link>
-            );
-          })}
-        </div>
-      </section>
-
-      {/* ============================================================
-          FEATURED COLLECTION RAILS
-          ============================================================ */}
-      <section className="container luxury-rails">
-        {featuredCategories.map((cat) => {
-          const catProducts = products.filter((p) => p.category === cat.name);
-          return (
-            <div key={cat.name} className="luxury-rail-block">
-              <div className="luxury-rail-header">
-                <div>
-                  <span className="luxury-rail-header__tag">DEPARTMENT</span>
-                  <h3 className="luxury-rail-header__title">{cat.name}</h3>
-                </div>
-                <Link to={`/browse?category=${encodeURIComponent(cat.name)}`} className="luxury-rail-header__link">
-                  View Collection →
-                </Link>
+        <div className="royal-rooms__grid">
+          {rooms.map((room) => (
+            <Link 
+              key={room.name} 
+              to={`/browse?category=${encodeURIComponent(room.name)}`}
+              className="royal-room-card"
+            >
+              <img src={room.image} alt={room.name} className="royal-room-card__image" loading="lazy" />
+              <div className="royal-room-card__overlay">
+                <span className="royal-room-card__num">{room.num}</span>
+                <h3 className="royal-room-card__title">{room.name}</h3>
+                <span className="royal-room-card__desc">{room.count} Cataloged Lots</span>
               </div>
-              <div className="luxury-rail-grid">
-                {catProducts.slice(0, 4).map((p) => (
-                  <ProductCard key={p.id} product={p} />
-                ))}
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* ============================================================
+          THE GALLERY WALL
+          ============================================================ */}
+      <section className="container royal-gallery-wall">
+        <div className="royal-section-header">
+          <span className="royal-section-header__tag">EXHIBIT DIRECTORY</span>
+          <h2 className="royal-section-header__title">Recent Acquisitions & Lot Releases</h2>
+        </div>
+
+        <div className="royal-gallery-grid">
+          {products.slice(0, 8).map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
+        </div>
+      </section>
+
+      {/* ============================================================
+          PROVENANCE EDITORIAL FEATURE BLOCK
+          ============================================================ */}
+      <section className="royal-feature">
+        <div className="container">
+          <div className="royal-feature__inner">
+            <div className="royal-feature__text">
+              <span className="royal-feature__tag">THE HERITAGE LEDGER</span>
+              <h2 className="royal-feature__title">
+                Hand-Selected with Uncompromising Rigor
+              </h2>
+              <p className="royal-feature__desc">
+                For over a century, our maison has operated as a private vault for discerning collectors. Every object in our collection is acquired directly from master workshops, documented with verifiable provenance, and preserved for generations.
+              </p>
+              <Link to="/browse" className="royal-hero__cta">
+                View All Cataloged Lots <span>→</span>
+              </Link>
+            </div>
+
+            <div className="royal-frame" style={{ height: '420px' }}>
+              <div className="royal-frame__inner" style={{ height: '100%' }}>
+                <img 
+                  src="https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=800&q=80" 
+                  alt="Royal Atelier" 
+                />
               </div>
             </div>
-          );
-        })}
+          </div>
+        </div>
       </section>
     </main>
   );

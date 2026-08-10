@@ -10,7 +10,7 @@ export default function CheckoutPage() {
   const { products, loading, getProduct } = useProducts();
   const [confirmed, setConfirmed] = useState(false);
   const count = getCount();
-  
+
   const { subtotal, discountAmount, gstAmount, shipping, grandTotal } = getCartTotals(products);
 
   const handleSubmit = (e) => {
@@ -24,19 +24,19 @@ export default function CheckoutPage() {
 
   if (confirmed) {
     return (
-      <main>
-        <div className="container">
-          <div className="confirmation">
-            <div className="confirmation__icon">
-              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <polyline points="20 6 9 17 4 12" />
-              </svg>
+      <main style={{ padding: '6rem 0' }}>
+        <div className="container" style={{ maxWidth: '640px' }}>
+          <div className="royal-ledger" style={{ textAlign: 'center' }}>
+            <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: 'var(--brass)', color: 'var(--emerald-dark)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem auto', fontSize: '1.5rem', fontWeight: 700 }}>
+              ✓
             </div>
-            <h2 className="confirmation__title">Order placed</h2>
-            <p className="confirmation__text">
-              Your order has been received. We will pack it carefully and ship it your way shortly.
+            <h1 className="royal-ledger__title">Reservation Confirmed</h1>
+            <p style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', margin: '1rem 0 2rem 0', fontSize: '1.1rem' }}>
+              Your order has been cataloged under Royal Warrant registry. Our master packers will carefully inspect and dispatch your pieces under private seal.
             </p>
-            <Link to="/" className="btn btn--primary">Back to the directory</Link>
+            <Link to="/" className="royal-lot-cta" style={{ display: 'inline-block' }}>
+              Return to The Entrance
+            </Link>
           </div>
         </div>
       </main>
@@ -45,140 +45,127 @@ export default function CheckoutPage() {
 
   if (count === 0) {
     return (
-      <main>
-        <div className="container" style={{ textAlign: 'center', padding: 'var(--space-4xl) 0' }}>
-          <p style={{ fontFamily: 'var(--font-body)', color: 'var(--charcoal)', opacity: 0.6, marginBottom: 'var(--space-xl)' }}>
-            Your bag is empty — add some items before checking out.
+      <main style={{ padding: '6rem 0', textAlign: 'center' }}>
+        <div className="container">
+          <p style={{ fontFamily: 'var(--font-serif)', color: 'var(--ivory)', fontSize: '1.2rem', marginBottom: '2rem' }}>
+            No lots reserved — please select pieces from our chambers prior to checkout.
           </p>
-          <Link to="/" className="btn btn--primary">Browse the directory</Link>
+          <Link to="/browse" className="royal-hero__cta">
+            Explore Galleries
+          </Link>
         </div>
       </main>
     );
   }
 
   return (
-    <main>
-      <div className="container">
-        <div className="page-heading">
-          <h1 className="page-heading__title">Check out</h1>
-          <p className="page-heading__sub">Secure checkout</p>
+    <main style={{ padding: '4rem 0 6rem 0' }}>
+      <div className="container" style={{ maxWidth: '960px' }}>
+        <div className="royal-ledger">
+          <div className="royal-ledger__header">
+            <h1 className="royal-ledger__title">Private Dispatch Checkout</h1>
+            <p className="royal-ledger__subtitle">Secured Registry Entry</p>
+          </div>
+
+          <form onSubmit={handleSubmit} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '3rem' }}>
+            <div>
+              <h2 style={{ fontFamily: 'var(--font-crest)', fontSize: '1.4rem', marginBottom: '1.25rem', borderBottom: '1px solid var(--parchment)', paddingBottom: '6px' }}>
+                Recipient & Address
+              </h2>
+              
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                <div>
+                  <label style={{ fontFamily: 'var(--font-sans)', fontSize: '0.65rem', letterSpacing: '0.18em', color: 'var(--brass-dark)', textTransform: 'uppercase' }}>Email Address</label>
+                  <input type="email" required style={{ width: '100%', padding: '10px', border: '1px solid var(--smoke)', background: '#FFF', fontFamily: 'var(--font-serif)', fontSize: '1rem', marginTop: '4px', outline: 'none' }} placeholder="lord.cheney@houseofreps.org" />
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                  <div>
+                    <label style={{ fontFamily: 'var(--font-sans)', fontSize: '0.65rem', letterSpacing: '0.18em', color: 'var(--brass-dark)', textTransform: 'uppercase' }}>First Name</label>
+                    <input type="text" required style={{ width: '100%', padding: '10px', border: '1px solid var(--smoke)', background: '#FFF', fontFamily: 'var(--font-serif)', fontSize: '1rem', marginTop: '4px', outline: 'none' }} />
+                  </div>
+                  <div>
+                    <label style={{ fontFamily: 'var(--font-sans)', fontSize: '0.65rem', letterSpacing: '0.18em', color: 'var(--brass-dark)', textTransform: 'uppercase' }}>Last Name</label>
+                    <input type="text" required style={{ width: '100%', padding: '10px', border: '1px solid var(--smoke)', background: '#FFF', fontFamily: 'var(--font-serif)', fontSize: '1rem', marginTop: '4px', outline: 'none' }} />
+                  </div>
+                </div>
+
+                <div>
+                  <label style={{ fontFamily: 'var(--font-sans)', fontSize: '0.65rem', letterSpacing: '0.18em', color: 'var(--brass-dark)', textTransform: 'uppercase' }}>Residence / Estate Address</label>
+                  <input type="text" required style={{ width: '100%', padding: '10px', border: '1px solid var(--smoke)', background: '#FFF', fontFamily: 'var(--font-serif)', fontSize: '1rem', marginTop: '4px', outline: 'none' }} placeholder="14 Kensington Palace Gardens" />
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                  <div>
+                    <label style={{ fontFamily: 'var(--font-sans)', fontSize: '0.65rem', letterSpacing: '0.18em', color: 'var(--brass-dark)', textTransform: 'uppercase' }}>City</label>
+                    <input type="text" required style={{ width: '100%', padding: '10px', border: '1px solid var(--smoke)', background: '#FFF', fontFamily: 'var(--font-serif)', fontSize: '1rem', marginTop: '4px', outline: 'none' }} />
+                  </div>
+                  <div>
+                    <label style={{ fontFamily: 'var(--font-sans)', fontSize: '0.65rem', letterSpacing: '0.18em', color: 'var(--brass-dark)', textTransform: 'uppercase' }}>Postal Code</label>
+                    <input type="text" required style={{ width: '100%', padding: '10px', border: '1px solid var(--smoke)', background: '#FFF', fontFamily: 'var(--font-serif)', fontSize: '1rem', marginTop: '4px', outline: 'none' }} />
+                  </div>
+                </div>
+              </div>
+
+              <h2 style={{ fontFamily: 'var(--font-crest)', fontSize: '1.4rem', margin: '2rem 0 1.25rem 0', borderBottom: '1px solid var(--parchment)', paddingBottom: '6px' }}>
+                Payment Method
+              </h2>
+              <div>
+                <label style={{ fontFamily: 'var(--font-sans)', fontSize: '0.65rem', letterSpacing: '0.18em', color: 'var(--brass-dark)', textTransform: 'uppercase' }}>Card Number</label>
+                <input type="text" required placeholder="•••• •••• •••• 4820" style={{ width: '100%', padding: '10px', border: '1px solid var(--smoke)', background: '#FFF', fontFamily: 'var(--font-mono)', fontSize: '0.9rem', marginTop: '4px', outline: 'none' }} />
+              </div>
+
+              <button type="submit" className="royal-lot-cta" style={{ marginTop: '2rem', display: 'block' }}>
+                Authorize Dispatch — {formatPrice(grandTotal)}
+              </button>
+            </div>
+
+            {/* Order Summary Side */}
+            <div style={{ background: 'var(--parchment)', padding: '2rem', borderRadius: '2px', height: 'fit-content' }}>
+              <h3 style={{ fontFamily: 'var(--font-crest)', fontSize: '1.3rem', marginBottom: '1.25rem', borderBottom: '1px solid rgba(0,0,0,0.1)', paddingBottom: '8px' }}>
+                Summary of Reserved Lots
+              </h3>
+              
+              {items.map(item => {
+                const product = getProduct(item.id);
+                if (!product) return null;
+                const price = product.sale ? product.salePrice : product.price;
+                return (
+                  <div key={item.id} style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', fontFamily: 'var(--font-serif)', fontSize: '0.95rem' }}>
+                    <span>{product.name} × {item.qty}</span>
+                    <span style={{ fontWeight: 600 }}>{formatPrice(price * item.qty)}</span>
+                  </div>
+                );
+              })}
+
+              <div style={{ marginTop: '1.5rem', paddingTop: '1rem', borderTop: '1px solid rgba(0,0,0,0.1)' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', padding: '4px 0', fontFamily: 'var(--font-serif)' }}>
+                  <span>Subtotal</span>
+                  <span>{formatPrice(subtotal)}</span>
+                </div>
+                {discountAmount > 0 && (
+                  <div style={{ display: 'flex', justifyContent: 'space-between', padding: '4px 0', color: 'var(--burgundy)', fontFamily: 'var(--font-serif)' }}>
+                    <span>Warrant Discount</span>
+                    <span>-{formatPrice(discountAmount)}</span>
+                  </div>
+                )}
+                <div style={{ display: 'flex', justifyContent: 'space-between', padding: '4px 0', fontFamily: 'var(--font-serif)' }}>
+                  <span>Statutory GST (18%)</span>
+                  <span>{formatPrice(gstAmount)}</span>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', padding: '4px 0', fontFamily: 'var(--font-serif)' }}>
+                  <span>Royal Carriage</span>
+                  <span>{shipping === 0 ? 'Complimentary' : formatPrice(shipping)}</span>
+                </div>
+              </div>
+
+              <div style={{ display: 'flex', justifyContent: 'space-between', padding: '12px 0 0 0', borderTop: '1px solid var(--smoke)', marginTop: '12px', fontFamily: 'var(--font-crest)', fontSize: '1.3rem', fontWeight: 600 }}>
+                <span>Grand Total</span>
+                <span>{formatPrice(grandTotal)}</span>
+              </div>
+            </div>
+          </form>
         </div>
-
-        <form className="checkout__layout" onSubmit={handleSubmit}>
-          <div>
-            <div className="checkout__form-section">
-              <h2 className="checkout__section-title">Contact</h2>
-              <div className="form-grid">
-                <div className="form-group form-group--full">
-                  <label className="form-label" htmlFor="email">Email</label>
-                  <input className="form-input" type="email" id="email" placeholder="your@email.com" required />
-                </div>
-              </div>
-            </div>
-
-            <div className="checkout__form-section">
-              <h2 className="checkout__section-title">Shipping address</h2>
-              <div className="form-grid">
-                <div className="form-group">
-                  <label className="form-label" htmlFor="first-name">First name</label>
-                  <input className="form-input" type="text" id="first-name" required />
-                </div>
-                <div className="form-group">
-                  <label className="form-label" htmlFor="last-name">Last name</label>
-                  <input className="form-input" type="text" id="last-name" required />
-                </div>
-                <div className="form-group form-group--full">
-                  <label className="form-label" htmlFor="address">Address</label>
-                  <input className="form-input" type="text" id="address" placeholder="Street address" required />
-                </div>
-                <div className="form-group form-group--full">
-                  <label className="form-label" htmlFor="address-2">Apartment, suite, etc.</label>
-                  <input className="form-input" type="text" id="address-2" placeholder="Optional" />
-                </div>
-                <div className="form-group">
-                  <label className="form-label" htmlFor="city">City</label>
-                  <input className="form-input" type="text" id="city" required />
-                </div>
-                <div className="form-group">
-                  <label className="form-label" htmlFor="state">State</label>
-                  <input className="form-input" type="text" id="state" required />
-                </div>
-                <div className="form-group">
-                  <label className="form-label" htmlFor="zip">ZIP code</label>
-                  <input className="form-input" type="text" id="zip" placeholder="00000" required />
-                </div>
-                <div className="form-group">
-                  <label className="form-label" htmlFor="phone">Phone</label>
-                  <input className="form-input" type="tel" id="phone" placeholder="+1" />
-                </div>
-              </div>
-            </div>
-
-            <div className="checkout__form-section">
-              <h2 className="checkout__section-title">Payment</h2>
-              <div className="form-grid">
-                <div className="form-group form-group--full">
-                  <label className="form-label" htmlFor="card-number">Card number</label>
-                  <input className="form-input" type="text" id="card-number" placeholder="1234 5678 9012 3456" required />
-                </div>
-                <div className="form-group">
-                  <label className="form-label" htmlFor="expiry">Expiry</label>
-                  <input className="form-input" type="text" id="expiry" placeholder="MM / YY" required />
-                </div>
-                <div className="form-group">
-                  <label className="form-label" htmlFor="cvv">CVV</label>
-                  <input className="form-input" type="text" id="cvv" placeholder="123" required />
-                </div>
-              </div>
-            </div>
-
-            <button type="submit" className="btn btn--primary btn--full">Place order</button>
-            <div style={{ textAlign: 'center', marginTop: 'var(--space-md)' }}>
-              <Link to="/cart" style={{ fontFamily: 'var(--font-body)', fontSize: '0.8125rem', color: 'var(--charcoal)', opacity: 0.6 }}>
-                Return to bag
-              </Link>
-            </div>
-          </div>
-
-          <div className="order-summary">
-            <h2 className="order-summary__title">Order summary</h2>
-            {items.map(item => {
-              const product = getProduct(item.id);
-              if (!product) return null;
-              const price = product.sale ? product.salePrice : product.price;
-              return (
-                <div key={item.id} className="order-summary__item">
-                  <span>{product.name} × {item.qty}</span>
-                  <span>{formatPrice(price * item.qty)}</span>
-                </div>
-              );
-            })}
-            <div style={{ marginTop: 'var(--space-md)', paddingTop: 'var(--space-sm)', borderTop: '1px solid var(--mist)' }}>
-              <div className="order-summary__item">
-                <span>Subtotal</span>
-                <span>{formatPrice(subtotal)}</span>
-              </div>
-              {discountAmount > 0 && (
-                <div className="order-summary__item" style={{ color: 'var(--rust-red)' }}>
-                  <span>Discount</span>
-                  <span>-{formatPrice(discountAmount)}</span>
-                </div>
-              )}
-              <div className="order-summary__item">
-                <span>GST (18%)</span>
-                <span>{formatPrice(gstAmount)}</span>
-              </div>
-              <div className="order-summary__item">
-                <span>Shipping</span>
-                <span>{shipping === 0 ? 'Free' : formatPrice(shipping)}</span>
-              </div>
-            </div>
-            <div className="order-summary__total">
-              <span>Total</span>
-              <span>{formatPrice(grandTotal)}</span>
-            </div>
-          </div>
-        </form>
       </div>
     </main>
   );

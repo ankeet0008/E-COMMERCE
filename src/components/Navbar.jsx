@@ -3,138 +3,140 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useCart } from '../data/CartContext';
 
 export default function Navbar() {
-  const [mobileOpen, setMobileOpen] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [query, setQuery] = useState('');
   const { getCount } = useCart();
-  const location = useLocation();
-  const navigate = useNavigate();
   const count = getCount();
+  const navigate = useNavigate();
+  const location = useLocation();
 
-  const handleSearchSubmit = (e) => {
+  const handleSearch = (e) => {
     e.preventDefault();
-    if (searchQuery.trim()) {
-      navigate(`/browse?q=${encodeURIComponent(searchQuery.trim())}`);
+    if (query.trim()) {
+      navigate(`/browse?q=${encodeURIComponent(query.trim())}`);
       setSearchOpen(false);
-      setSearchQuery('');
+      setQuery('');
     }
   };
 
-  const isHome = location.pathname === '/';
-
   return (
-    <header className={`luxury-header ${isHome ? 'luxury-header--hero' : ''}`}>
-      <div className="luxury-header__inner">
-        {/* Left: Luxury Menu trigger */}
-        <div className="luxury-header__left">
+    <header className="royal-header">
+      {/* Top Warrant Banner */}
+      <div className="royal-header__top-banner">
+        <span>By Appointment Purveyors of Fine Objects · Royal Court Warrant Est. 1884</span>
+      </div>
+
+      <div className="royal-header__inner">
+        {/* Left: Room Directory Drawer Trigger */}
+        <div className="royal-header__left">
           <button 
-            className="luxury-header__menu-btn" 
-            onClick={() => setMobileOpen(!mobileOpen)}
-            aria-label="Toggle Menu"
+            className="royal-header__drawer-btn"
+            onClick={() => setDrawerOpen(true)}
+            aria-label="Open Room Directory"
           >
-            <span className="luxury-header__menu-icon">
-              <span></span>
-              <span></span>
-            </span>
-            <span className="luxury-header__menu-text">Menu</span>
+            <svg width="18" height="12" viewBox="0 0 18 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <line y1="1" x2="18" y2="1" stroke="currentColor" strokeWidth="1.5"/>
+              <line y1="6" x2="14" y2="6" stroke="currentColor" strokeWidth="1.5"/>
+              <line y1="11" x2="18" y2="11" stroke="currentColor" strokeWidth="1.5"/>
+            </svg>
+            <span>The Chambers</span>
           </button>
         </div>
 
-        {/* Center: Luxury Logo Crest & Brand Title */}
-        <div className="luxury-header__center">
-          <Link to="/" className="luxury-header__brand">
-            <svg className="luxury-header__crest" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M20 4L24.5 13H15.5L20 4Z" fill="currentColor"/>
-              <path d="M12 16H28V18H12V16Z" fill="currentColor"/>
-              <path d="M14 20H26V34H14V20Z" stroke="currentColor" strokeWidth="1.5"/>
-              <circle cx="20" cy="27" r="3" stroke="currentColor" strokeWidth="1.2"/>
-              <path d="M20 4V36" stroke="currentColor" strokeWidth="0.8" strokeDasharray="2 2"/>
+        {/* Center: Monogram Crest & Brand Title */}
+        <div className="royal-header__center">
+          <Link to="/" className="royal-header__brand">
+            <svg className="royal-header__crest-svg" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M20 3L25 12H15L20 3Z" fill="currentColor"/>
+              <path d="M10 16H30V18H10V16Z" fill="currentColor"/>
+              <path d="M12 20H28V35H12V20Z" stroke="currentColor" strokeWidth="1.5"/>
+              <path d="M16 26C16 23.7909 17.7909 22 20 22C22.2091 22 24 23.7909 24 26V35H16V26Z" fill="currentColor" fillOpacity="0.15" stroke="currentColor" strokeWidth="1.2"/>
+              <circle cx="20" cy="9" r="1.5" fill="currentColor"/>
             </svg>
-            <span className="luxury-header__title">ATELIER & CO.</span>
-            <span className="luxury-header__subtitle">MAISON FLAGSTORE</span>
+            <span className="royal-header__title">THE ROYAL EMPORIUM</span>
+            <span className="royal-header__warrant">BY APPOINTMENT — EST. 1884</span>
           </Link>
         </div>
 
-        {/* Right: Sleek Action Icons */}
-        <div className="luxury-header__right">
+        {/* Right: Search & Reserved Items Badge */}
+        <div className="royal-header__right">
           <button 
-            className="luxury-header__action-btn"
+            className="royal-header__icon-btn" 
             onClick={() => setSearchOpen(!searchOpen)}
-            aria-label="Search"
-            title="Search"
+            title="Search Archives"
           >
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.5">
-              <circle cx="11" cy="11" r="7"></circle>
-              <line x1="16.5" y1="16.5" x2="22" y2="22"></line>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+              <circle cx="11" cy="11" r="7"/>
+              <line x1="16.5" y1="16.5" x2="22" y2="22"/>
             </svg>
           </button>
 
-          <Link to="/browse" className="luxury-header__action-btn" title="Explore Catalog">
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.5">
-              <rect x="3" y="3" width="7" height="7"></rect>
-              <rect x="14" y="3" width="7" height="7"></rect>
-              <rect x="14" y="14" width="7" height="7"></rect>
-              <rect x="3" y="14" width="7" height="7"></rect>
+          <Link to="/browse" className="royal-header__icon-btn" title="View All Galleries">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+              <rect x="3" y="3" width="7" height="7"/>
+              <rect x="14" y="3" width="7" height="7"/>
+              <rect x="14" y="14" width="7" height="7"/>
+              <rect x="3" y="14" width="7" height="7"/>
             </svg>
           </Link>
 
-          <Link to="/cart" className="luxury-header__action-btn luxury-header__bag" title="Shopping Bag">
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.5">
+          <Link to="/cart" className="royal-header__icon-btn" title="Reserved Pieces">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
               <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
               <line x1="3" y1="6" x2="21" y2="6"/>
               <path d="M16 10a4 4 0 01-8 0"/>
             </svg>
-            {count > 0 && <span className="luxury-header__bag-count">{count}</span>}
+            {count > 0 && <span className="royal-header__reserved-badge">{count}</span>}
           </Link>
         </div>
       </div>
 
-      {/* Expanded Quick Navigation Overlay */}
-      {mobileOpen && (
-        <div className="luxury-nav-overlay" onClick={() => setMobileOpen(false)}>
-          <div className="luxury-nav-overlay__content" onClick={e => e.stopPropagation()}>
-            <div className="luxury-nav-overlay__header">
-              <span>EXPLORE DEPARTMENTS</span>
-              <button onClick={() => setMobileOpen(false)}>✕</button>
+      {/* Drawer Overlay for Room Navigation */}
+      {drawerOpen && (
+        <div className="royal-drawer" onClick={() => setDrawerOpen(false)}>
+          <div className="royal-drawer__content" onClick={e => e.stopPropagation()}>
+            <div className="royal-drawer__header">
+              <span>EMPORIUM ROOM DIRECTORY</span>
+              <button onClick={() => setDrawerOpen(false)} style={{ color: 'var(--brass)' }}>✕</button>
             </div>
-            <nav className="luxury-nav-overlay__links">
-              <Link to="/" onClick={() => setMobileOpen(false)}>
-                <span>01</span> Home & Atelier
+            <nav className="royal-drawer__links">
+              <Link to="/" className="royal-drawer__link" onClick={() => setDrawerOpen(false)}>
+                <span>I.</span> Grand Entrance & Courtyard
               </Link>
-              <Link to="/browse" onClick={() => setMobileOpen(false)}>
-                <span>02</span> All Collections
+              <Link to="/browse" className="royal-drawer__link" onClick={() => setDrawerOpen(false)}>
+                <span>II.</span> The Complete Collection
               </Link>
-              <Link to="/browse?category=Beauty" onClick={() => setMobileOpen(false)}>
-                <span>03</span> Beauty & Apothecary
+              <Link to="/browse?category=Beauty" className="royal-drawer__link" onClick={() => setDrawerOpen(false)}>
+                <span>III.</span> The Royal Apothecary
               </Link>
-              <Link to="/browse?category=Fragrances" onClick={() => setMobileOpen(false)}>
-                <span>04</span> Fine Fragrances
+              <Link to="/browse?category=Fragrances" className="royal-drawer__link" onClick={() => setDrawerOpen(false)}>
+                <span>IV.</span> The Perfumer’s Cabinet
               </Link>
-              <Link to="/browse?category=Furniture" onClick={() => setMobileOpen(false)}>
-                <span>05</span> Maison Furniture
-              </Link>
-              <Link to="/cart" onClick={() => setMobileOpen(false)}>
-                <span>06</span> Your Selection ({count})
+
+              <Link to="/cart" className="royal-drawer__link" onClick={() => setDrawerOpen(false)}>
+                <span>V.</span> Reserved Pieces ({count})
               </Link>
             </nav>
           </div>
         </div>
       )}
 
-      {/* Glassmorphic Top Search Bar */}
+      {/* Search Bar Overlay */}
       {searchOpen && (
-        <div className="luxury-search-bar">
+        <div className="royal-search">
           <div className="container">
-            <form onSubmit={handleSearchSubmit} className="luxury-search-bar__form">
+            <form onSubmit={handleSearch} className="royal-search__form">
               <input 
                 type="text" 
-                placeholder="Search luxury inventory, collections, materials..." 
-                value={searchQuery}
-                onChange={e => setSearchQuery(e.target.value)}
+                placeholder="Search the royal collection by lot, material, or provenance..." 
+                value={query}
+                onChange={e => setQuery(e.target.value)}
+                className="royal-search__input"
                 autoFocus
               />
-              <button type="submit">SEARCH</button>
-              <button type="button" onClick={() => setSearchOpen(false)}>CANCEL</button>
+              <button type="submit" className="royal-search__submit">Search Archives</button>
+              <button type="button" onClick={() => setSearchOpen(false)} className="royal-search__submit" style={{ opacity: 0.6 }}>Close</button>
             </form>
           </div>
         </div>
