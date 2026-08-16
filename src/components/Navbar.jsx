@@ -1,146 +1,162 @@
 import { useState } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../data/CartContext';
+import { useProducts } from '../data/ProductsContext';
 
 export default function Navbar() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
-  const [query, setQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
   const { getCount } = useCart();
+  const { categories } = useProducts();
   const count = getCount();
   const navigate = useNavigate();
-  const location = useLocation();
 
-  const handleSearch = (e) => {
+  const handleSearchSubmit = (e) => {
     e.preventDefault();
-    if (query.trim()) {
-      navigate(`/browse?q=${encodeURIComponent(query.trim())}`);
+    if (searchQuery.trim()) {
+      navigate(`/browse?q=${encodeURIComponent(searchQuery.trim())}`);
       setSearchOpen(false);
-      setQuery('');
+      setSearchQuery('');
     }
   };
 
+  const navCategories = [
+    { name: 'Alle Produkte', path: '/browse' },
+    { name: 'Sofas', path: '/browse?category=Sofas' },
+    { name: 'Sessel', path: '/browse?category=Sessel' },
+    { name: 'Stühle', path: '/browse?category=Stühle' },
+    { name: 'Esstische', path: '/browse?category=Esstische' },
+    { name: 'Teppiche', path: '/browse?category=Teppiche' },
+    { name: 'Spiegel', path: '/browse?category=Spiegel' },
+    { name: 'Aufbewahrung', path: '/browse?category=Aufbewahrung' },
+    { name: 'Betten', path: '/browse?category=Betten' },
+    { name: 'Esstisch-Sets', path: '/browse?category=Esstisch-Sets' },
+  ];
+
   return (
-    <header className="royal-header">
-      {/* Top Warrant Banner */}
-      <div className="royal-header__top-banner">
-        <span>By Appointment Purveyors of Fine Objects · Royal Court Warrant Est. 1884</span>
-      </div>
-
-      <div className="royal-header__inner">
-        {/* Left: Room Directory Drawer Trigger */}
-        <div className="royal-header__left">
+    <>
+      <header className="fixed top-0 left-0 w-full z-50 bg-[#fcf9f8]/85 backdrop-blur-md flex justify-between items-center h-20 px-[20px] md:px-[64px] transition-all duration-300 border-b border-outline-variant/30">
+        {/* Left: Menu Drawer Toggle */}
+        <div className="flex items-center gap-4">
           <button 
-            className="royal-header__drawer-btn"
             onClick={() => setDrawerOpen(true)}
-            aria-label="Open Room Directory"
+            className="text-on-surface-variant hover:text-primary transition-colors duration-300 p-2 rounded-full hover:bg-surface-container"
+            aria-label="Navigation Menu"
           >
-            <svg width="18" height="12" viewBox="0 0 18 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <line y1="1" x2="18" y2="1" stroke="currentColor" strokeWidth="1.5"/>
-              <line y1="6" x2="14" y2="6" stroke="currentColor" strokeWidth="1.5"/>
-              <line y1="11" x2="18" y2="11" stroke="currentColor" strokeWidth="1.5"/>
-            </svg>
-            <span>The Chambers</span>
+            <span className="material-symbols-outlined text-[24px]">menu</span>
           </button>
         </div>
 
-        {/* Center: Monogram Crest & Brand Title */}
-        <div className="royal-header__center">
-          <Link to="/" className="royal-header__brand">
-            <svg className="royal-header__crest-svg" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M20 3L25 12H15L20 3Z" fill="currentColor"/>
-              <path d="M10 16H30V18H10V16Z" fill="currentColor"/>
-              <path d="M12 20H28V35H12V20Z" stroke="currentColor" strokeWidth="1.5"/>
-              <path d="M16 26C16 23.7909 17.7909 22 20 22C22.2091 22 24 23.7909 24 26V35H16V26Z" fill="currentColor" fillOpacity="0.15" stroke="currentColor" strokeWidth="1.2"/>
-              <circle cx="20" cy="9" r="1.5" fill="currentColor"/>
-            </svg>
-            <span className="royal-header__title">THE ROYAL EMPORIUM</span>
-            <span className="royal-header__warrant">BY APPOINTMENT — EST. 1884</span>
+        {/* Center: Brand Logo */}
+        <div className="absolute left-1/2 -translate-x-1/2">
+          <Link to="/" className="inline-block">
+            <span className="font-display-lg text-[28px] md:text-[36px] tracking-tighter text-on-surface font-semibold select-none">
+              SKANVI
+            </span>
           </Link>
         </div>
 
-        {/* Right: Search & Reserved Items Badge */}
-        <div className="royal-header__right">
+        {/* Right: Search & Shopping Bag */}
+        <div className="flex items-center gap-2 md:gap-4 text-on-surface-variant">
           <button 
-            className="royal-header__icon-btn" 
             onClick={() => setSearchOpen(!searchOpen)}
-            title="Search Archives"
+            className="hover:text-primary transition-colors duration-300 p-2 rounded-full hover:bg-surface-container"
+            aria-label="Suche"
           >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-              <circle cx="11" cy="11" r="7"/>
-              <line x1="16.5" y1="16.5" x2="22" y2="22"/>
-            </svg>
+            <span className="material-symbols-outlined text-[24px]">search</span>
           </button>
-
-          <Link to="/browse" className="royal-header__icon-btn" title="View All Galleries">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-              <rect x="3" y="3" width="7" height="7"/>
-              <rect x="14" y="3" width="7" height="7"/>
-              <rect x="14" y="14" width="7" height="7"/>
-              <rect x="3" y="14" width="7" height="7"/>
-            </svg>
-          </Link>
-
-          <Link to="/cart" className="royal-header__icon-btn" title="Reserved Pieces">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-              <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
-              <line x1="3" y1="6" x2="21" y2="6"/>
-              <path d="M16 10a4 4 0 01-8 0"/>
-            </svg>
-            {count > 0 && <span className="royal-header__reserved-badge">{count}</span>}
+          
+          <Link 
+            to="/cart"
+            className="hover:text-primary transition-colors duration-300 relative p-2 rounded-full hover:bg-surface-container flex items-center justify-center"
+            aria-label="Warenkorb"
+          >
+            <span className="material-symbols-outlined text-[24px]">shopping_bag</span>
+            {count > 0 && (
+              <span className="absolute top-1 right-1 bg-primary text-on-primary text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">
+                {count}
+              </span>
+            )}
           </Link>
         </div>
-      </div>
+      </header>
 
-      {/* Drawer Overlay for Room Navigation */}
+      {/* Slide-in Navigation Drawer */}
       {drawerOpen && (
-        <div className="royal-drawer" onClick={() => setDrawerOpen(false)}>
-          <div className="royal-drawer__content" onClick={e => e.stopPropagation()}>
-            <div className="royal-drawer__header">
-              <span>EMPORIUM ROOM DIRECTORY</span>
-              <button onClick={() => setDrawerOpen(false)} style={{ color: 'var(--brass)' }}>✕</button>
-            </div>
-            <nav className="royal-drawer__links">
-              <Link to="/" className="royal-drawer__link" onClick={() => setDrawerOpen(false)}>
-                <span>I.</span> Grand Entrance & Courtyard
-              </Link>
-              <Link to="/browse" className="royal-drawer__link" onClick={() => setDrawerOpen(false)}>
-                <span>II.</span> The Complete Collection
-              </Link>
-              <Link to="/browse?category=Beauty" className="royal-drawer__link" onClick={() => setDrawerOpen(false)}>
-                <span>III.</span> The Royal Apothecary
-              </Link>
-              <Link to="/browse?category=Fragrances" className="royal-drawer__link" onClick={() => setDrawerOpen(false)}>
-                <span>IV.</span> The Perfumer’s Cabinet
-              </Link>
+        <div 
+          className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex transition-opacity duration-300"
+          onClick={() => setDrawerOpen(false)}
+        >
+          <div 
+            className="w-full max-w-sm bg-surface h-full shadow-2xl p-6 md:p-8 flex flex-col justify-between overflow-y-auto transform transition-transform duration-300 ease-out"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div>
+              <div className="flex justify-between items-center pb-6 border-b border-outline-variant/40">
+                <span className="font-display-lg text-2xl font-bold tracking-tighter text-on-surface">SKANVI</span>
+                <button 
+                  onClick={() => setDrawerOpen(false)}
+                  className="p-2 text-on-surface-variant hover:text-primary rounded-full hover:bg-surface-container"
+                >
+                  <span className="material-symbols-outlined">close</span>
+                </button>
+              </div>
 
-              <Link to="/cart" className="royal-drawer__link" onClick={() => setDrawerOpen(false)}>
-                <span>V.</span> Reserved Pieces ({count})
-              </Link>
-            </nav>
+              <div className="py-6">
+                <p className="font-label-caps text-label-caps text-on-surface-variant uppercase mb-4 tracking-wider">
+                  Kategorien
+                </p>
+                <nav className="flex flex-col gap-3">
+                  {navCategories.map((cat) => (
+                    <Link
+                      key={cat.name}
+                      to={cat.path}
+                      onClick={() => setDrawerOpen(false)}
+                      className="font-headline-sm text-[17px] text-on-surface hover:text-primary py-2 px-3 rounded-lg hover:bg-surface-container flex items-center justify-between transition-colors"
+                    >
+                      <span>{cat.name}</span>
+                      <span className="material-symbols-outlined text-sm text-outline">chevron_right</span>
+                    </Link>
+                  ))}
+                </nav>
+              </div>
+            </div>
+
+            <div className="pt-6 border-t border-outline-variant/30 text-sm text-on-surface-variant">
+              <p className="font-medium text-on-surface mb-1">Skanvi Living</p>
+              <p className="text-xs text-secondary">Räume, die sich nach dir anfühlen. Editorial Minimalism for Slow Living.</p>
+            </div>
           </div>
         </div>
       )}
 
       {/* Search Bar Overlay */}
       {searchOpen && (
-        <div className="royal-search">
-          <div className="container">
-            <form onSubmit={handleSearch} className="royal-search__form">
-              <input 
-                type="text" 
-                placeholder="Search the royal collection by lot, material, or provenance..." 
-                value={query}
-                onChange={e => setQuery(e.target.value)}
-                className="royal-search__input"
+        <div 
+          className="fixed top-20 left-0 w-full z-40 bg-surface/95 backdrop-blur-md border-b border-outline-variant/40 py-4 px-margin-mobile md:px-margin-desktop shadow-sm animate-fade-in"
+        >
+          <div className="max-w-3xl mx-auto">
+            <form onSubmit={handleSearchSubmit} className="relative flex items-center">
+              <span className="material-symbols-outlined absolute left-4 text-outline">search</span>
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Wonach suchst du? (z.B. Sofa, Sessel, Teppich, Spiegel)..."
+                className="w-full pl-12 pr-28 py-3.5 bg-surface-container rounded-full text-on-surface placeholder:text-on-surface-variant/60 outline-none focus:ring-2 focus:ring-primary text-sm md:text-base border border-transparent"
                 autoFocus
               />
-              <button type="submit" className="royal-search__submit">Search Archives</button>
-              <button type="button" onClick={() => setSearchOpen(false)} className="royal-search__submit" style={{ opacity: 0.6 }}>Close</button>
+              <button
+                type="submit"
+                className="absolute right-2 px-5 py-2 bg-primary text-on-primary rounded-full text-sm font-medium hover:bg-primary-container transition-colors"
+              >
+                Suchen
+              </button>
             </form>
           </div>
         </div>
       )}
-    </header>
+    </>
   );
 }

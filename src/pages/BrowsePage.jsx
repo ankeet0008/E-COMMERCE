@@ -1,52 +1,70 @@
 import { useState, useMemo } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { useProducts } from '../data/ProductsContext';
 import ProductCard from '../components/ProductCard';
 import Spinner from '../components/Spinner';
 
 export default function BrowsePage() {
-  const { products, categories, loading, error } = useProducts();
+  const { products, loading, error } = useProducts();
   const [searchParams, setSearchParams] = useSearchParams();
   const categoryParam = searchParams.get('category') || 'All';
   const queryParam = searchParams.get('q') || '';
-  const [sortBy, setSortBy] = useState('lot');
+  const [sortBy, setSortBy] = useState('featured');
+  const [filterDrawerOpen, setFilterDrawerOpen] = useState(false);
+  const [visibleCount, setVisibleCount] = useState(8);
 
-  const allCategoryNames = ['All', ...categories.map(c => c.name)];
+  const categoriesList = [
+    'All',
+    'Sofas',
+    'Sessel',
+    'Stühle',
+    'Esstische',
+    'Teppiche',
+    'Spiegel',
+    'Aufbewahrung',
+    'Betten',
+    'Esstisch-Sets'
+  ];
 
   const filtered = useMemo(() => {
-    let result = [...products];
+    let list = [...products];
 
     if (categoryParam !== 'All') {
-      result = result.filter(p => p.category === categoryParam);
+      list = list.filter(
+        p => p.category.toLowerCase() === categoryParam.toLowerCase()
+      );
     }
 
     if (queryParam) {
       const q = queryParam.toLowerCase();
-      result = result.filter(
-        p => p.name.toLowerCase().includes(q) || p.description.toLowerCase().includes(q)
+      list = list.filter(
+        p =>
+          p.name.toLowerCase().includes(q) ||
+          p.category.toLowerCase().includes(q) ||
+          p.description?.toLowerCase().includes(q)
       );
     }
 
     switch (sortBy) {
-      case 'name':
-        result.sort((a, b) => a.name.localeCompare(b.name));
-        break;
       case 'price-asc':
-        result.sort((a, b) => (a.sale ? a.salePrice : a.price) - (b.sale ? b.salePrice : b.price));
+        list.sort((a, b) => (a.sale ? a.salePrice : a.price) - (b.sale ? b.salePrice : b.price));
         break;
       case 'price-desc':
-        result.sort((a, b) => (b.sale ? b.salePrice : b.price) - (a.sale ? a.salePrice : a.price));
+        list.sort((a, b) => (b.sale ? b.salePrice : b.price) - (a.sale ? a.salePrice : a.price));
         break;
-      case 'lot':
+      case 'name':
+        list.sort((a, b) => a.name.localeCompare(b.name));
+        break;
+      case 'featured':
       default:
-        result.sort((a, b) => a.id - b.id);
+        list.sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0));
         break;
     }
 
-    return result;
+    return list;
   }, [products, categoryParam, queryParam, sortBy]);
 
-  const handleCategoryClick = (cat) => {
+  const handleCategorySelect = (cat) => {
     if (cat === 'All') {
       searchParams.delete('category');
     } else {
@@ -55,92 +73,178 @@ export default function BrowsePage() {
     setSearchParams(searchParams);
   };
 
-  const handleClearSearch = () => {
+  const handleClearQuery = () => {
     searchParams.delete('q');
     setSearchParams(searchParams);
   };
 
-  if (loading) return <main><Spinner /></main>;
-  if (error) return (
-    <main style={{ padding: '6rem 0', textAlign: 'center' }}>
-      <p style={{ fontFamily: 'var(--font-serif)', color: 'var(--ivory)' }}>
-        The Archive is temporarily inaccessible — {error}
-      </p>
-    </main>
-  );
+  if (loading) {
+    return (
+      <main className="pt-32 pb-20 flex justify-center items-center min-h-[60vh]">
+        <Spinner />
+      </main>
+    );
+  }
+
+  if (error) {
+    return (
+      <main className="pt-32 pb-20 text-center px-4">
+        <p className="text-on-surface-variant font-medium">Die Produkte konnten momentan nicht geladen werden.</p>
+      </main>
+    );
+  }
+
+  const visibleProducts = filtered.slice(0, visibleCount);
 
   return (
-    <main style={{ paddingBottom: '6rem' }}>
-      <div className="container" style={{ paddingTop: '4rem' }}>
-        {/* Header Placard */}
-        <div style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
-          <span className="royal-section-header__tag">CHAMBER DIRECTORY</span>
-          <h1 className="royal-section-header__title">
-            {queryParam ? `Search Archives: "${queryParam}"` : (categoryParam === 'All' ? 'The Complete Royal Collection' : categoryParam)}
-          </h1>
-          <p style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', opacity: 0.8, marginTop: '8px' }}>
-            Cataloged lots currently available for acquisition ({filtered.length} items registered)
-          </p>
-        </div>
-
-        {/* Filter Bar & Sort */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem', marginBottom: '3rem', borderBottom: '1px solid rgba(168,130,60,0.25)', paddingBottom: '1.5rem' }}>
-          <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-            {queryParam && (
-              <button 
-                onClick={handleClearSearch}
-                style={{ background: 'var(--burgundy)', color: 'var(--ivory)', padding: '6px 14px', fontFamily: 'var(--font-sans)', fontSize: '0.68rem', letterSpacing: '0.15em', textTransform: 'uppercase' }}
-              >
-                Clear Search ×
-              </button>
-            )}
-            {allCategoryNames.map(cat => (
-              <button
-                key={cat}
-                onClick={() => handleCategoryClick(cat)}
-                style={{
-                  background: cat === categoryParam ? 'var(--brass)' : 'transparent',
-                  color: cat === categoryParam ? 'var(--emerald-dark)' : 'var(--ivory)',
-                  border: '1px solid var(--brass)',
-                  padding: '6px 16px',
-                  fontFamily: 'var(--font-sans)',
-                  fontSize: '0.68rem',
-                  letterSpacing: '0.18em',
-                  textTransform: 'uppercase',
-                  transition: 'all 300ms'
-                }}
-              >
-                {cat}
-              </button>
-            ))}
+    <main className="w-full pt-20">
+      {/* Page Header & Filter/Sort Bar */}
+      <section className="px-margin-mobile md:px-margin-desktop py-8 bg-surface-container-low border-b border-outline-variant/30">
+        <div className="max-w-container-max mx-auto flex flex-col gap-4">
+          {/* Breadcrumbs */}
+          <div className="text-label-caps text-on-surface-variant flex items-center gap-2 text-xs font-semibold tracking-wider uppercase">
+            <Link to="/" className="hover:text-primary transition-colors">HOME</Link>
+            <span className="material-symbols-outlined text-[16px]">chevron_right</span>
+            <span className="text-on-surface">{categoryParam === 'All' ? 'SHOP ALL' : categoryParam.toUpperCase()}</span>
           </div>
 
-          <select
-            value={sortBy}
-            onChange={e => setSortBy(e.target.value)}
-            style={{
-              background: 'var(--emerald-dark)',
-              color: 'var(--brass)',
-              border: '1px solid var(--brass)',
-              padding: '6px 14px',
-              fontFamily: 'var(--font-sans)',
-              fontSize: '0.72rem',
-              letterSpacing: '0.15em',
-              outline: 'none'
-            }}
-          >
-            <option value="lot">Sort: Lot Number</option>
-            <option value="name">Sort: Title A–Z</option>
-            <option value="price-asc">Sort: Valuation ↑</option>
-            <option value="price-desc">Sort: Valuation ↓</option>
-          </select>
-        </div>
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+            <div>
+              <h1 className="font-headline-md text-headline-md text-on-surface font-semibold">
+                {queryParam ? `Suchergebnisse für "${queryParam}"` : (categoryParam === 'All' ? 'Alle Produkte' : categoryParam)}
+              </h1>
+              <p className="text-sm text-on-surface-variant mt-1">
+                {filtered.length} {filtered.length === 1 ? 'Designstück' : 'Designstücke'} kuratiert für dein Zuhause
+              </p>
+            </div>
 
-        {/* Gallery Wall Grid */}
-        <div className="royal-gallery-grid">
-          {filtered.map(p => <ProductCard key={p.id} product={p} />)}
+            {queryParam && (
+              <button
+                onClick={handleClearQuery}
+                className="self-start md:self-auto text-xs px-3 py-1.5 bg-primary/10 text-primary rounded-full hover:bg-primary/20 transition-colors flex items-center gap-1"
+              >
+                <span>Filter löschen: {queryParam}</span>
+                <span className="material-symbols-outlined text-sm">close</span>
+              </button>
+            )}
+          </div>
+
+          {/* Category Chips Scroll */}
+          <div className="flex overflow-x-auto hide-scrollbar gap-2 pt-2 pb-1">
+            {categoriesList.map((cat) => {
+              const isActive = (cat === 'All' && categoryParam === 'All') || cat === categoryParam;
+              return (
+                <button
+                  key={cat}
+                  onClick={() => handleCategorySelect(cat)}
+                  className={`px-4 py-2 rounded-full text-xs font-medium whitespace-nowrap transition-colors ${
+                    isActive 
+                      ? 'bg-primary text-on-primary shadow-xs' 
+                      : 'bg-surface border border-outline-variant/50 text-on-surface hover:bg-surface-container'
+                  }`}
+                >
+                  {cat === 'All' ? 'Alle' : cat}
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Filter / Sort Interactive Bar */}
+          <div className="flex justify-between items-center mt-2 border-t border-outline-variant/40 pt-3">
+            <button 
+              onClick={() => setFilterDrawerOpen(!filterDrawerOpen)}
+              className="flex items-center gap-2 text-on-surface font-body-md text-sm hover:text-primary transition-colors"
+            >
+              <span className="material-symbols-outlined text-base">tune</span>
+              <span>Filter ({filtered.length})</span>
+            </button>
+
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-on-surface-variant hidden sm:inline">Sortieren:</span>
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+                className="bg-surface text-on-surface text-xs font-medium border border-outline-variant/60 rounded-full px-3 py-1.5 outline-none focus:ring-1 focus:ring-primary cursor-pointer"
+              >
+                <option value="featured">Empfohlen</option>
+                <option value="price-asc">Preis: Niedrig bis Hoch</option>
+                <option value="price-desc">Preis: Hoch bis Niedrig</option>
+                <option value="name">Alphabetisch (A-Z)</option>
+              </select>
+            </div>
+          </div>
         </div>
-      </div>
+      </section>
+
+      {/* Product Grid */}
+      <section className="px-margin-mobile md:px-margin-desktop py-8 max-w-container-max mx-auto">
+        {filtered.length === 0 ? (
+          <div className="text-center py-16 bg-surface-container-low rounded-2xl p-8">
+            <span className="material-symbols-outlined text-4xl text-outline mb-2">search_off</span>
+            <p className="font-headline-sm text-lg text-on-surface mb-2 font-medium">Keine Produkte gefunden</p>
+            <p className="text-sm text-on-surface-variant mb-6">Bitte versuche es mit einem anderen Suchbegriff oder Filter.</p>
+            <button
+              onClick={() => {
+                searchParams.delete('category');
+                searchParams.delete('q');
+                setSearchParams(searchParams);
+              }}
+              className="px-6 py-2.5 bg-primary text-on-primary rounded-full text-sm font-medium hover:bg-primary-container transition-colors"
+            >
+              Alle Filter zurücksetzen
+            </button>
+          </div>
+        ) : (
+          <>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+              {visibleProducts.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
+
+            {visibleCount < filtered.length && (
+              <div className="mt-12 flex justify-center">
+                <button 
+                  onClick={() => setVisibleCount(prev => prev + 8)}
+                  className="border border-outline text-on-surface px-8 py-3 rounded-full font-body-md text-sm font-medium hover:bg-surface-variant transition-colors"
+                >
+                  Mehr laden ({filtered.length - visibleCount} weitere)
+                </button>
+              </div>
+            )}
+          </>
+        )}
+      </section>
+
+      {/* Trust Indicators */}
+      <section className="bg-surface-container-low py-12 px-margin-mobile md:px-margin-desktop border-t border-outline-variant/30 mt-16">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-container-max mx-auto">
+          <div className="text-center">
+            <h4 className="font-headline-sm text-headline-sm text-on-surface mb-2 font-medium">
+              Persönlich kuratiert
+            </h4>
+            <p className="text-on-surface-variant font-body-md text-sm">
+              Designauswahl statt unübersichtlicher Masse
+            </p>
+          </div>
+          <div className="text-center">
+            <h4 className="font-headline-sm text-headline-sm text-on-surface mb-2 font-medium">
+              Sicher einkaufen
+            </h4>
+            <p className="text-on-surface-variant font-body-md text-sm">
+              Verlässliche Zahlarten und verschlüsselte Zahlung
+            </p>
+          </div>
+          <div className="text-center">
+            <h4 className="font-headline-sm text-headline-sm text-on-surface mb-2 font-medium">
+              Transparent geliefert
+            </h4>
+            <p className="text-on-surface-variant font-body-md text-sm">
+              Lieferzeit direkt am jeweiligen Produkt
+            </p>
+          </div>
+        </div>
+      </section>
     </main>
   );
 }

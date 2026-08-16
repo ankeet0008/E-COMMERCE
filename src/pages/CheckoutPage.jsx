@@ -9,35 +9,67 @@ export default function CheckoutPage() {
   const { items, getCartTotals, getCount, clearCart } = useCart();
   const { products, loading, getProduct } = useProducts();
   const [confirmed, setConfirmed] = useState(false);
+  const [orderNumber, setOrderNumber] = useState('');
   const count = getCount();
 
   const { subtotal, discountAmount, gstAmount, shipping, grandTotal } = getCartTotals(products);
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const generatedOrderNum = 'SKV-' + Math.floor(100000 + Math.random() * 900000);
+    setOrderNumber(generatedOrderNum);
     clearCart();
     setConfirmed(true);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  if (loading) return <main><Spinner /></main>;
+  if (loading) {
+    return (
+      <main className="pt-32 pb-20 flex justify-center items-center min-h-[60vh]">
+        <Spinner />
+      </main>
+    );
+  }
 
   if (confirmed) {
     return (
-      <main style={{ padding: '6rem 0' }}>
-        <div className="container" style={{ maxWidth: '640px' }}>
-          <div className="royal-ledger" style={{ textAlign: 'center' }}>
-            <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: 'var(--brass)', color: 'var(--emerald-dark)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem auto', fontSize: '1.5rem', fontWeight: 700 }}>
-              ✓
-            </div>
-            <h1 className="royal-ledger__title">Reservation Confirmed</h1>
-            <p style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', margin: '1rem 0 2rem 0', fontSize: '1.1rem' }}>
-              Your order has been cataloged under Royal Warrant registry. Our master packers will carefully inspect and dispatch your pieces under private seal.
-            </p>
-            <Link to="/" className="royal-lot-cta" style={{ display: 'inline-block' }}>
-              Return to The Entrance
-            </Link>
+      <main className="pt-36 pb-32">
+        <div className="px-margin-mobile md:px-margin-desktop max-w-lg mx-auto text-center">
+          <div className="w-16 h-16 bg-[#e5f2df] text-primary rounded-full flex items-center justify-center mx-auto mb-6">
+            <span className="material-symbols-outlined text-3xl">check</span>
           </div>
+
+          <p className="font-label-caps text-label-caps text-on-surface-variant uppercase mb-2">
+            BESTELLUNG ERFOLGREICH
+          </p>
+          <h1 className="font-display-lg-mobile text-2xl md:text-3xl font-medium text-on-surface mb-3">
+            Vielen Dank für dein Vertrauen!
+          </h1>
+          <p className="text-sm text-on-surface-variant mb-6 leading-relaxed">
+            Deine Bestellung mit der Nummer <strong>{orderNumber}</strong> wurde aufgenommen. Wir bereiten deine Möbel und Wohnstücke mit größter Sorgfalt für den Versand vor.
+          </p>
+
+          <div className="bg-surface-container-low p-6 rounded-2xl text-left text-xs text-on-surface-variant flex flex-col gap-2 mb-8 border border-outline-variant/30">
+            <div className="flex justify-between">
+              <span>Bestellnummer:</span>
+              <span className="font-semibold text-on-surface">{orderNumber}</span>
+            </div>
+            <div className="flex justify-between">
+              <span>Voraussichtliche Lieferung:</span>
+              <span className="font-semibold text-on-surface">3-5 Werktage</span>
+            </div>
+            <div className="flex justify-between">
+              <span>Bestätigung versendet an:</span>
+              <span className="font-semibold text-on-surface">Deine angegebene E-Mail</span>
+            </div>
+          </div>
+
+          <Link
+            to="/"
+            className="inline-flex px-8 py-3.5 bg-primary text-on-primary rounded-full font-medium hover:bg-primary-container transition-colors shadow-sm text-sm"
+          >
+            Zurück zur Startseite
+          </Link>
         </div>
       </main>
     );
@@ -45,127 +77,221 @@ export default function CheckoutPage() {
 
   if (count === 0) {
     return (
-      <main style={{ padding: '6rem 0', textAlign: 'center' }}>
-        <div className="container">
-          <p style={{ fontFamily: 'var(--font-serif)', color: 'var(--ivory)', fontSize: '1.2rem', marginBottom: '2rem' }}>
-            No lots reserved — please select pieces from our chambers prior to checkout.
-          </p>
-          <Link to="/browse" className="royal-hero__cta">
-            Explore Galleries
-          </Link>
-        </div>
+      <main className="pt-36 pb-32 text-center px-4 max-w-md mx-auto">
+        <span className="material-symbols-outlined text-5xl text-outline mb-4">shopping_bag</span>
+        <h1 className="font-headline-md text-2xl font-medium text-on-surface mb-2">Keine Artikel im Warenkorb</h1>
+        <p className="text-sm text-on-surface-variant mb-8">
+          Bitte wähle vor dem Checkout Produkte aus unserer Kollektion aus.
+        </p>
+        <Link
+          to="/browse"
+          className="inline-flex px-8 py-3 bg-primary text-on-primary rounded-full font-medium hover:bg-primary-container transition-colors text-sm"
+        >
+          Kollektion entdecken
+        </Link>
       </main>
     );
   }
 
   return (
-    <main style={{ padding: '4rem 0 6rem 0' }}>
-      <div className="container" style={{ maxWidth: '960px' }}>
-        <div className="royal-ledger">
-          <div className="royal-ledger__header">
-            <h1 className="royal-ledger__title">Private Dispatch Checkout</h1>
-            <p className="royal-ledger__subtitle">Secured Registry Entry</p>
-          </div>
+    <main className="pt-28 pb-section-gap">
+      <div className="px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
+        {/* Header */}
+        <div className="mb-10">
+          <p className="font-label-caps text-label-caps text-on-surface-variant uppercase mb-2">
+            SCHRITT 2 VON 2
+          </p>
+          <h1 className="font-display-lg-mobile text-3xl md:text-4xl font-medium text-on-surface">
+            Kasse & Versand
+          </h1>
+        </div>
 
-          <form onSubmit={handleSubmit} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '3rem' }}>
-            <div>
-              <h2 style={{ fontFamily: 'var(--font-crest)', fontSize: '1.4rem', marginBottom: '1.25rem', borderBottom: '1px solid var(--parchment)', paddingBottom: '6px' }}>
-                Recipient & Address
+        <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-start">
+          {/* Customer & Shipping Form (Left 7 Cols) */}
+          <div className="lg:col-span-7 flex flex-col gap-8">
+            {/* Contact Information */}
+            <div className="bg-surface-container-low p-6 md:p-8 rounded-3xl border border-outline-variant/30">
+              <h2 className="font-headline-sm text-lg font-semibold text-on-surface mb-4">
+                1. Kontaktdaten
               </h2>
-              
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              <div className="flex flex-col gap-4">
                 <div>
-                  <label style={{ fontFamily: 'var(--font-sans)', fontSize: '0.65rem', letterSpacing: '0.18em', color: 'var(--brass-dark)', textTransform: 'uppercase' }}>Email Address</label>
-                  <input type="email" required style={{ width: '100%', padding: '10px', border: '1px solid var(--smoke)', background: '#FFF', fontFamily: 'var(--font-serif)', fontSize: '1rem', marginTop: '4px', outline: 'none' }} placeholder="lord.cheney@houseofreps.org" />
-                </div>
-
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-                  <div>
-                    <label style={{ fontFamily: 'var(--font-sans)', fontSize: '0.65rem', letterSpacing: '0.18em', color: 'var(--brass-dark)', textTransform: 'uppercase' }}>First Name</label>
-                    <input type="text" required style={{ width: '100%', padding: '10px', border: '1px solid var(--smoke)', background: '#FFF', fontFamily: 'var(--font-serif)', fontSize: '1rem', marginTop: '4px', outline: 'none' }} />
-                  </div>
-                  <div>
-                    <label style={{ fontFamily: 'var(--font-sans)', fontSize: '0.65rem', letterSpacing: '0.18em', color: 'var(--brass-dark)', textTransform: 'uppercase' }}>Last Name</label>
-                    <input type="text" required style={{ width: '100%', padding: '10px', border: '1px solid var(--smoke)', background: '#FFF', fontFamily: 'var(--font-serif)', fontSize: '1rem', marginTop: '4px', outline: 'none' }} />
-                  </div>
-                </div>
-
-                <div>
-                  <label style={{ fontFamily: 'var(--font-sans)', fontSize: '0.65rem', letterSpacing: '0.18em', color: 'var(--brass-dark)', textTransform: 'uppercase' }}>Residence / Estate Address</label>
-                  <input type="text" required style={{ width: '100%', padding: '10px', border: '1px solid var(--smoke)', background: '#FFF', fontFamily: 'var(--font-serif)', fontSize: '1rem', marginTop: '4px', outline: 'none' }} placeholder="14 Kensington Palace Gardens" />
-                </div>
-
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-                  <div>
-                    <label style={{ fontFamily: 'var(--font-sans)', fontSize: '0.65rem', letterSpacing: '0.18em', color: 'var(--brass-dark)', textTransform: 'uppercase' }}>City</label>
-                    <input type="text" required style={{ width: '100%', padding: '10px', border: '1px solid var(--smoke)', background: '#FFF', fontFamily: 'var(--font-serif)', fontSize: '1rem', marginTop: '4px', outline: 'none' }} />
-                  </div>
-                  <div>
-                    <label style={{ fontFamily: 'var(--font-sans)', fontSize: '0.65rem', letterSpacing: '0.18em', color: 'var(--brass-dark)', textTransform: 'uppercase' }}>Postal Code</label>
-                    <input type="text" required style={{ width: '100%', padding: '10px', border: '1px solid var(--smoke)', background: '#FFF', fontFamily: 'var(--font-serif)', fontSize: '1rem', marginTop: '4px', outline: 'none' }} />
-                  </div>
+                  <label className="block text-xs font-semibold text-on-surface-variant uppercase tracking-wider mb-1.5">
+                    E-Mail-Adresse für Bestellbestätigung *
+                  </label>
+                  <input
+                    type="email"
+                    required
+                    placeholder="name@beispiel.de"
+                    className="w-full px-4 py-3 bg-surface rounded-xl border border-outline-variant/50 text-sm text-on-surface outline-none focus:ring-1 focus:ring-primary"
+                  />
                 </div>
               </div>
-
-              <h2 style={{ fontFamily: 'var(--font-crest)', fontSize: '1.4rem', margin: '2rem 0 1.25rem 0', borderBottom: '1px solid var(--parchment)', paddingBottom: '6px' }}>
-                Payment Method
-              </h2>
-              <div>
-                <label style={{ fontFamily: 'var(--font-sans)', fontSize: '0.65rem', letterSpacing: '0.18em', color: 'var(--brass-dark)', textTransform: 'uppercase' }}>Card Number</label>
-                <input type="text" required placeholder="•••• •••• •••• 4820" style={{ width: '100%', padding: '10px', border: '1px solid var(--smoke)', background: '#FFF', fontFamily: 'var(--font-mono)', fontSize: '0.9rem', marginTop: '4px', outline: 'none' }} />
-              </div>
-
-              <button type="submit" className="royal-lot-cta" style={{ marginTop: '2rem', display: 'block' }}>
-                Authorize Dispatch — {formatPrice(grandTotal)}
-              </button>
             </div>
 
-            {/* Order Summary Side */}
-            <div style={{ background: 'var(--parchment)', padding: '2rem', borderRadius: '2px', height: 'fit-content' }}>
-              <h3 style={{ fontFamily: 'var(--font-crest)', fontSize: '1.3rem', marginBottom: '1.25rem', borderBottom: '1px solid rgba(0,0,0,0.1)', paddingBottom: '8px' }}>
-                Summary of Reserved Lots
-              </h3>
-              
-              {items.map(item => {
+            {/* Shipping Address */}
+            <div className="bg-surface-container-low p-6 md:p-8 rounded-3xl border border-outline-variant/30">
+              <h2 className="font-headline-sm text-lg font-semibold text-on-surface mb-4">
+                2. Lieferadresse
+              </h2>
+              <div className="flex flex-col gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-semibold text-on-surface-variant uppercase tracking-wider mb-1.5">
+                      Vorname *
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="Anna"
+                      className="w-full px-4 py-3 bg-surface rounded-xl border border-outline-variant/50 text-sm text-on-surface outline-none focus:ring-1 focus:ring-primary"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-on-surface-variant uppercase tracking-wider mb-1.5">
+                      Nachname *
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="Müller"
+                      className="w-full px-4 py-3 bg-surface rounded-xl border border-outline-variant/50 text-sm text-on-surface outline-none focus:ring-1 focus:ring-primary"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-on-surface-variant uppercase tracking-wider mb-1.5">
+                    Straße & Hausnummer *
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="Lindenallee 14"
+                    className="w-full px-4 py-3 bg-surface rounded-xl border border-outline-variant/50 text-sm text-on-surface outline-none focus:ring-1 focus:ring-primary"
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-semibold text-on-surface-variant uppercase tracking-wider mb-1.5">
+                      Postleitzahl *
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="10115"
+                      className="w-full px-4 py-3 bg-surface rounded-xl border border-outline-variant/50 text-sm text-on-surface outline-none focus:ring-1 focus:ring-primary"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-on-surface-variant uppercase tracking-wider mb-1.5">
+                      Stadt *
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="Berlin"
+                      className="w-full px-4 py-3 bg-surface rounded-xl border border-outline-variant/50 text-sm text-on-surface outline-none focus:ring-1 focus:ring-primary"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Payment Method */}
+            <div className="bg-surface-container-low p-6 md:p-8 rounded-3xl border border-outline-variant/30">
+              <h2 className="font-headline-sm text-lg font-semibold text-on-surface mb-4">
+                3. Zahlungsart
+              </h2>
+              <div className="flex flex-col gap-3">
+                <label className="flex items-center gap-3 p-4 bg-surface rounded-xl border border-outline-variant/50 cursor-pointer hover:border-primary transition-colors">
+                  <input type="radio" name="payment" defaultChecked className="text-primary focus:ring-primary" />
+                  <span className="font-medium text-sm text-on-surface">Kreditkarte (Visa, Mastercard, Amex)</span>
+                </label>
+                <label className="flex items-center gap-3 p-4 bg-surface rounded-xl border border-outline-variant/50 cursor-pointer hover:border-primary transition-colors">
+                  <input type="radio" name="payment" className="text-primary focus:ring-primary" />
+                  <span className="font-medium text-sm text-on-surface">PayPal / Express Checkout</span>
+                </label>
+                <label className="flex items-center gap-3 p-4 bg-surface rounded-xl border border-outline-variant/50 cursor-pointer hover:border-primary transition-colors">
+                  <input type="radio" name="payment" className="text-primary focus:ring-primary" />
+                  <span className="font-medium text-sm text-on-surface">Klarna (Rechnung & Ratenkauf)</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          {/* Live Order Summary (Right 5 Cols) */}
+          <div className="lg:col-span-5 bg-surface-container-low p-6 md:p-8 rounded-3xl border border-outline-variant/30 sticky top-28">
+            <h2 className="font-headline-sm text-lg font-semibold text-on-surface mb-6 pb-4 border-b border-outline-variant/40">
+              Deine Bestellung ({count})
+            </h2>
+
+            <div className="flex flex-col gap-4 max-h-72 overflow-y-auto hide-scrollbar pr-1 mb-6 border-b border-outline-variant/40 pb-6">
+              {items.map((item) => {
                 const product = getProduct(item.id);
                 if (!product) return null;
                 const price = product.sale ? product.salePrice : product.price;
+
                 return (
-                  <div key={item.id} style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', fontFamily: 'var(--font-serif)', fontSize: '0.95rem' }}>
-                    <span>{product.name} × {item.qty}</span>
-                    <span style={{ fontWeight: 600 }}>{formatPrice(price * item.qty)}</span>
+                  <div key={item.id} className="flex items-center justify-between text-sm">
+                    <div className="flex items-center gap-3">
+                      <div className="w-12 h-12 rounded-lg bg-surface-container overflow-hidden shrink-0">
+                        <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
+                      </div>
+                      <div>
+                        <p className="font-medium text-on-surface line-clamp-1">{product.name}</p>
+                        <p className="text-xs text-on-surface-variant">Menge: {item.qty}</p>
+                      </div>
+                    </div>
+                    <span className="font-medium text-on-surface">{formatPrice(price * item.qty)}</span>
                   </div>
                 );
               })}
+            </div>
 
-              <div style={{ marginTop: '1.5rem', paddingTop: '1rem', borderTop: '1px solid rgba(0,0,0,0.1)' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', padding: '4px 0', fontFamily: 'var(--font-serif)' }}>
-                  <span>Subtotal</span>
-                  <span>{formatPrice(subtotal)}</span>
-                </div>
-                {discountAmount > 0 && (
-                  <div style={{ display: 'flex', justifyContent: 'space-between', padding: '4px 0', color: 'var(--burgundy)', fontFamily: 'var(--font-serif)' }}>
-                    <span>Warrant Discount</span>
-                    <span>-{formatPrice(discountAmount)}</span>
-                  </div>
-                )}
-                <div style={{ display: 'flex', justifyContent: 'space-between', padding: '4px 0', fontFamily: 'var(--font-serif)' }}>
-                  <span>Statutory GST (18%)</span>
-                  <span>{formatPrice(gstAmount)}</span>
-                </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', padding: '4px 0', fontFamily: 'var(--font-serif)' }}>
-                  <span>Royal Carriage</span>
-                  <span>{shipping === 0 ? 'Complimentary' : formatPrice(shipping)}</span>
-                </div>
+            <div className="flex flex-col gap-3 text-sm border-b border-outline-variant/40 pb-6 mb-6">
+              <div className="flex justify-between text-on-surface-variant">
+                <span>Zwischensumme</span>
+                <span className="text-on-surface font-medium">{formatPrice(subtotal)}</span>
               </div>
-
-              <div style={{ display: 'flex', justifyContent: 'space-between', padding: '12px 0 0 0', borderTop: '1px solid var(--smoke)', marginTop: '12px', fontFamily: 'var(--font-crest)', fontSize: '1.3rem', fontWeight: 600 }}>
-                <span>Grand Total</span>
-                <span>{formatPrice(grandTotal)}</span>
+              {discountAmount > 0 && (
+                <div className="flex justify-between text-primary">
+                  <span>Rabatt</span>
+                  <span className="font-medium">-{formatPrice(discountAmount)}</span>
+                </div>
+              )}
+              <div className="flex justify-between text-on-surface-variant">
+                <span>Versand</span>
+                <span className="text-on-surface font-medium">
+                  {shipping === 0 ? 'Kostenlos' : formatPrice(shipping)}
+                </span>
+              </div>
+              <div className="flex justify-between text-on-surface-variant text-xs">
+                <span>inkl. 19% MwSt.</span>
+                <span>{formatPrice(gstAmount)}</span>
               </div>
             </div>
-          </form>
-        </div>
+
+            <div className="flex justify-between items-baseline mb-8">
+              <span className="font-headline-sm text-base font-semibold text-on-surface">Gesamtbetrag</span>
+              <span className="font-headline-md text-2xl font-bold text-on-surface">
+                {formatPrice(grandTotal)}
+              </span>
+            </div>
+
+            <button
+              type="submit"
+              className="w-full py-4 bg-primary text-on-primary text-center rounded-full font-medium hover:bg-primary-container transition-colors shadow-sm block text-sm cursor-pointer"
+            >
+              Jetzt zahlungspflichtig bestellen
+            </button>
+
+            <p className="text-[11px] text-on-surface-variant/70 text-center mt-4 leading-normal">
+              Mit deiner Bestellung erklärst du dich mit unseren AGB und den Datenschutzbestimmungen einverstanden.
+            </p>
+          </div>
+        </form>
       </div>
     </main>
   );

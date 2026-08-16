@@ -1,15 +1,113 @@
 <!doctype html>
-<html lang="en">
+<html class="light" lang="de">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>The Royal Emporium — By Appointment to the Court</title>
-    <meta name="description" content="A private emporium under royal warrant. Purveyors of fine objects, apothecary, leatherware, and atelier goods since 1884." />
+    <title>Skanvi Living - Räume, die sich nach dir anfühlen</title>
+    <meta name="description" content="Besondere Möbel, Leuchten und Accessoires – kuratiert für ein Zuhause mit Persönlichkeit." />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400;1,600&family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-container": "#f0eded",
+              "on-secondary-fixed-variant": "#534434",
+              "surface-container-high": "#eae7e7",
+              "error": "#ba1a1a",
+              "background-warm": "#F8F8F8",
+              "error-container": "#ffdad6",
+              "surface-container-low": "#f6f3f2",
+              "background": "#fcf9f8",
+              "on-surface": "#1c1b1b",
+              "inverse-surface": "#313030",
+              "tertiary-container": "#7d666b",
+              "on-primary": "#ffffff",
+              "inverse-primary": "#bdcab8",
+              "primary-fixed": "#d9e6d4",
+              "on-tertiary-fixed-variant": "#564146",
+              "surface-taupe": "#E8E2D9",
+              "primary": "#4b5749",
+              "on-secondary-fixed": "#25190c",
+              "outline-variant": "#c4c8c0",
+              "surface-variant": "#e5e2e1",
+              "surface-container-highest": "#e5e2e1",
+              "outline": "#747871",
+              "on-secondary": "#ffffff",
+              "on-secondary-container": "#736150",
+              "primary-container": "#636f60",
+              "secondary-container": "#f6dec9",
+              "secondary": "#6c5b4b",
+              "on-primary-fixed-variant": "#3e4a3c",
+              "secondary-fixed-dim": "#d9c3ae",
+              "inverse-on-surface": "#f3f0ef",
+              "tertiary": "#634e53",
+              "on-primary-fixed": "#141e13",
+              "tertiary-fixed-dim": "#dcbfc5",
+              "surface-dim": "#dcd9d9",
+              "on-surface-variant": "#444842",
+              "surface-bright": "#fcf9f8",
+              "secondary-fixed": "#f6dec9",
+              "surface-container-lowest": "#ffffff",
+              "on-tertiary-fixed": "#27171b",
+              "on-tertiary": "#ffffff",
+              "surface-tint": "#566253",
+              "on-error": "#ffffff",
+              "status-oos": "#A89481",
+              "on-background": "#1c1b1b",
+              "on-tertiary-container": "#ffe9ed",
+              "status-available": "#636F60",
+              "surface": "#fcf9f8",
+              "tertiary-fixed": "#f9dbe1",
+              "primary-fixed-dim": "#bdcab8",
+              "on-error-container": "#93000a",
+              "on-primary-container": "#e5f2df"
+            },
+            borderRadius: {
+              "DEFAULT": "0.25rem",
+              "lg": "0.5rem",
+              "xl": "0.75rem",
+              "full": "9999px"
+            },
+            spacing: {
+              "margin-desktop": "64px",
+              "gutter": "24px",
+              "section-gap": "120px",
+              "container-max": "1440px",
+              "margin-mobile": "20px"
+            },
+            fontFamily: {
+              "label-caps": ["'Plus Jakarta Sans'", "sans-serif"],
+              "display-lg": ["'Plus Jakarta Sans'", "sans-serif"],
+              "headline-md": ["'Plus Jakarta Sans'", "sans-serif"],
+              "headline-sm": ["'Plus Jakarta Sans'", "sans-serif"],
+              "body-md": ["'Plus Jakarta Sans'", "sans-serif"],
+              "display-lg-mobile": ["'Plus Jakarta Sans'", "sans-serif"],
+              "body-lg": ["'Plus Jakarta Sans'", "sans-serif"],
+              "price": ["'Plus Jakarta Sans'", "sans-serif"],
+              "sans": ["'Plus Jakarta Sans'", "sans-serif"]
+            },
+            fontSize: {
+              "label-caps": ["12px", { "lineHeight": "1.2", "letterSpacing": "0.1em", "fontWeight": "600" }],
+              "display-lg": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "500" }],
+              "headline-md": ["24px", { "lineHeight": "1.3", "fontWeight": "500" }],
+              "headline-sm": ["20px", { "lineHeight": "1.4", "fontWeight": "500" }],
+              "body-md": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
+              "display-lg-mobile": ["32px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "500" }],
+              "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+              "price": ["16px", { "lineHeight": "1.0", "fontWeight": "500" }]
+            }
+          }
+        }
+      };
+    </script>
   </head>
-  <body>
+  <body class="bg-background text-on-background font-body-md antialiased selection:bg-primary/20 selection:text-primary">
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
