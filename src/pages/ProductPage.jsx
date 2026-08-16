@@ -14,9 +14,9 @@ export default function ProductPage() {
 
   if (loading) return <main><Spinner /></main>;
   if (error) return (
-    <main style={{ padding: '8rem 0', textAlign: 'center' }}>
-      <p style={{ fontFamily: 'var(--font-sans)', color: 'var(--platinum)' }}>
-        release not found — {error}
+    <main style={{ padding: '6rem 0', textAlign: 'center' }}>
+      <p style={{ fontFamily: 'var(--font-serif)', color: 'var(--ivory)' }}>
+        Could not retrieve cataloged lot — {error}
       </p>
     </main>
   );
@@ -25,12 +25,12 @@ export default function ProductPage() {
 
   if (!product) {
     return (
-      <main style={{ padding: '8rem 0', textAlign: 'center' }}>
-        <p style={{ fontFamily: 'var(--font-sans)', color: 'var(--platinum)', marginBottom: '2rem' }}>
-          this piece is no longer in the active procession.
+      <main style={{ padding: '6rem 0', textAlign: 'center' }}>
+        <p style={{ fontFamily: 'var(--font-serif)', color: 'var(--ivory)' }}>
+          This lot is no longer registered in the active collection.
         </p>
-        <Link to="/browse" className="spotlight-detail__cta" style={{ maxWidth: '240px', margin: '0 auto' }}>
-          return to index
+        <Link to="/browse" className="royal-hero__cta" style={{ marginTop: '2rem' }}>
+          Return to Galleries
         </Link>
       </main>
     );
@@ -39,82 +39,110 @@ export default function ProductPage() {
   const price = product.sale ? product.salePrice : product.price;
   const relatedProducts = getProductsByCategory(product.category)
     .filter(p => p.id !== product.id)
-    .slice(0, 3);
+    .slice(0, 4);
 
   const handleAcquire = () => {
     addItem(product.id, qty);
   };
 
+  const lotNumber = `LOT NO. ${String(product.id * 17 + 100).padStart(3, '0')}`;
+
   return (
-    <main className="spotlight-detail">
+    <main className="royal-lot-page">
       <div className="container">
-        <div className="spotlight-detail__layout">
-          {/* Spotlit Image */}
-          <div className="spotlight-detail__img-container">
-            <img src={product.image} alt={product.name} />
+        {/* Breadcrumb */}
+        <div style={{ fontFamily: 'var(--font-sans)', fontSize: '0.68rem', letterSpacing: '0.2em', color: 'var(--brass)', textTransform: 'uppercase', marginBottom: '2rem' }}>
+          <Link to="/">The Emporium</Link> / <Link to={`/browse?category=${encodeURIComponent(product.category)}`}>{product.category}</Link> / <span>{lotNumber}</span>
+        </div>
+
+        <div className="royal-lot-layout">
+          {/* Framed Image */}
+          <div>
+            <div className="royal-frame" style={{ height: '480px' }}>
+              <div className="royal-frame__inner" style={{ height: '100%' }}>
+                <img src={product.image} alt={product.name} />
+              </div>
+            </div>
           </div>
 
-          {/* Sparse Declarative Copy */}
-          <div className="spotlight-detail__info">
-            <span className="spotlight-detail__subtitle">
-              release 0{product.id} · {product.category.toLowerCase()}
-            </span>
-            
-            <h1 className="spotlight-detail__title">{product.name}</h1>
-            
-            <div className="spotlight-detail__price">{formatPrice(price)}</div>
-
-            {/* Short Spaced Declarative Sentences */}
-            <div className="spotlight-detail__body-text">
-              <p style={{ marginBottom: '1.25rem' }}>
-                One release. {product.stock || 40} pieces crafted.
-              </p>
-              <p style={{ marginBottom: '1.25rem' }}>
-                {product.description}
-              </p>
-              {product.brand && (
-                <p style={{ marginBottom: '1.25rem' }}>
-                  Presented by {product.brand}.
-                </p>
-              )}
-              <p>
-                Dimensions: {product.dimensions}. Weight: {product.weight}.
-              </p>
+          {/* Auction Lot Description */}
+          <div className="royal-lot-info">
+            <div className="royal-lot-header">
+              <span className="royal-lot-number">{lotNumber} · {product.category.toUpperCase()}</span>
+              <h1 className="royal-lot-title">{product.name}</h1>
+              <div className="royal-lot-price">
+                {product.sale && (
+                  <span style={{ textDecoration: 'line-through', opacity: 0.4, marginRight: '12px', fontSize: '1.2rem' }}>
+                    {formatPrice(product.price)}
+                  </span>
+                )}
+                {formatPrice(price)}
+              </div>
             </div>
 
-            {/* Quantity & CTA */}
-            <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', marginTop: '2.5rem' }}>
-              <div style={{ display: 'inline-flex', border: '1px solid var(--platinum-border)', background: 'var(--midnight)' }}>
+            <p style={{ fontFamily: 'var(--font-serif)', fontSize: '1.05rem', lineHeight: '1.7', color: 'var(--smoke)', opacity: 0.9 }}>
+              {product.description}
+            </p>
+
+            <div className="royal-lot-specs">
+              <div className="royal-lot-spec-row">
+                <label>SKU Registry</label>
+                <span>{product.sku}</span>
+              </div>
+              {product.brand && (
+                <div className="royal-lot-spec-row">
+                  <label>Atelier Origin</label>
+                  <span>{product.brand}</span>
+                </div>
+              )}
+              <div className="royal-lot-spec-row">
+                <label>Dimensions</label>
+                <span>{product.dimensions}</span>
+              </div>
+              <div className="royal-lot-spec-row">
+                <label>Weight</label>
+                <span>{product.weight}</span>
+              </div>
+              <div className="royal-lot-spec-row">
+                <label>Inventory Status</label>
+                <span>{product.stock} Pieces Available</span>
+              </div>
+            </div>
+
+            {/* Quantity Selector & Acquire CTA */}
+            <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', marginTop: '2rem' }}>
+              <div style={{ display: 'inline-flex', border: '1px solid var(--parchment)', background: 'var(--ivory)' }}>
                 <button 
                   onClick={() => setQty(q => Math.max(1, q - 1))}
-                  style={{ padding: '10px 16px', color: 'var(--porcelain)', fontFamily: 'var(--font-sans)' }}
+                  style={{ padding: '10px 16px', color: 'var(--smoke)', fontFamily: 'var(--font-sans)' }}
                 >
                   −
                 </button>
-                <span style={{ padding: '10px 16px', color: 'var(--porcelain)', fontFamily: 'var(--font-sans)', fontWeight: 600 }}>{qty}</span>
+                <span style={{ padding: '10px 16px', color: 'var(--smoke)', fontFamily: 'var(--font-sans)', fontWeight: 600 }}>{qty}</span>
                 <button 
                   onClick={() => setQty(q => q + 1)}
-                  style={{ padding: '10px 16px', color: 'var(--porcelain)', fontFamily: 'var(--font-sans)' }}
+                  style={{ padding: '10px 16px', color: 'var(--smoke)', fontFamily: 'var(--font-sans)' }}
                 >
                   +
                 </button>
               </div>
 
-              <button className="spotlight-detail__cta" onClick={handleAcquire} style={{ flex: 1 }}>
-                select piece — {formatPrice(price * qty)}
+              <button className="royal-lot-cta" onClick={handleAcquire} style={{ flex: 1 }}>
+                Reserve For Collection — {formatPrice(price * qty)}
               </button>
             </div>
           </div>
         </div>
 
-        {/* Next Unveilings */}
+        {/* Related Lots */}
         {relatedProducts.length > 0 && (
-          <div style={{ marginTop: '7rem', paddingTop: '4rem', borderTop: '1px solid var(--platinum-border)' }}>
-            <p style={{ fontFamily: 'var(--font-sans)', fontSize: '0.72rem', letterSpacing: '0.22em', color: 'var(--platinum)', textTransform: 'lowercase', textAlign: 'center', marginBottom: '2.5rem' }}>
-              subsequent unveilings in {product.category.toLowerCase()}
-            </p>
-            <div>
-              {relatedProducts.map(p => <ProductCard key={p.id} product={p} layout="row" />)}
+          <div style={{ marginTop: '6rem', paddingTop: '4rem', borderTop: '1px solid rgba(168,130,60,0.3)' }}>
+            <div className="royal-section-header">
+              <span className="royal-section-header__tag">COMPLEMENTARY LOTS</span>
+              <h2 className="royal-section-header__title">Also In {product.category}</h2>
+            </div>
+            <div className="royal-gallery-grid">
+              {relatedProducts.map(p => <ProductCard key={p.id} product={p} />)}
             </div>
           </div>
         )}
