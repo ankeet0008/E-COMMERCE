@@ -1,21 +1,11 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useCart } from '../data/CartContext';
 import { formatPrice } from '../data/api';
 
 export default function ProductCard({ product, showAction = false, className = '' }) {
-  const { addItem } = useCart();
   const [isWishlisted, setIsWishlisted] = useState(false);
-  const isOutOfStock = product.stock === 0 || product.status === 'Ausverkauft';
+  const isOutOfStock = product.stock === 0 || product.status === 'Out of Stock';
   const price = product.sale ? product.salePrice : product.price;
-
-  const handleQuickAdd = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (!isOutOfStock) {
-      addItem(product.id, 1);
-    }
-  };
 
   const toggleWishlist = (e) => {
     e.preventDefault();
@@ -44,14 +34,14 @@ export default function ProductCard({ product, showAction = false, className = '
         {/* Stock Status Badge */}
         <div className="absolute top-2.5 left-2.5 bg-surface/85 backdrop-blur-md px-2.5 py-1 rounded-full text-[11px] uppercase font-semibold tracking-wider">
           <span className={isOutOfStock ? 'text-status-oos' : 'text-status-available'}>
-            {isOutOfStock ? 'Ausverkauft' : 'Lieferbar'}
+            {isOutOfStock ? 'Out of Stock' : 'In Stock'}
           </span>
         </div>
 
         {/* Wishlist Button */}
         <button
           onClick={toggleWishlist}
-          aria-label={isWishlisted ? "Aus Wunschliste entfernen" : "Zur Wunschliste hinzufügen"}
+          aria-label={isWishlisted ? "Remove from wishlist" : "Add to wishlist"}
           className="absolute top-2.5 right-2.5 w-8 h-8 bg-surface/75 backdrop-blur-md rounded-full flex items-center justify-center text-on-surface hover:text-primary transition-colors hover:bg-surface"
         >
           <span className={`material-symbols-outlined text-[18px] ${isWishlisted ? 'fill text-[#93000a]' : ''}`}>
@@ -68,7 +58,7 @@ export default function ProductCard({ product, showAction = false, className = '
           </h3>
         </Link>
         <p className="font-price text-price text-on-surface-variant font-medium">
-          {product.category === 'Sofas' ? 'Ab ' : ''}{formatPrice(price)}
+          {product.category === 'Sofas' ? 'From ' : ''}{formatPrice(price)}
         </p>
 
         {showAction && (
@@ -77,7 +67,7 @@ export default function ProductCard({ product, showAction = false, className = '
               to={`/product/${product.id}`}
               className="w-full py-2.5 border border-outline-variant text-center rounded-full text-sm font-medium text-on-surface hover:bg-surface-container hover:border-outline transition-colors"
             >
-              Details ansehen
+              View Details
             </Link>
           </div>
         )}

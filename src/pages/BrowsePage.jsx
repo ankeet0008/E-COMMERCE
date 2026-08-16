@@ -16,14 +16,14 @@ export default function BrowsePage() {
   const categoriesList = [
     'All',
     'Sofas',
-    'Sessel',
-    'Stühle',
-    'Esstische',
-    'Teppiche',
-    'Spiegel',
-    'Aufbewahrung',
-    'Betten',
-    'Esstisch-Sets'
+    'Armchairs',
+    'Chairs',
+    'Dining Tables',
+    'Rugs',
+    'Mirrors',
+    'Storage',
+    'Beds',
+    'Dining Sets'
   ];
 
   const filtered = useMemo(() => {
@@ -89,7 +89,7 @@ export default function BrowsePage() {
   if (error) {
     return (
       <main className="pt-32 pb-20 text-center px-4">
-        <p className="text-on-surface-variant font-medium">Die Produkte konnten momentan nicht geladen werden.</p>
+        <p className="text-on-surface-variant font-medium">Products could not be loaded at this time.</p>
       </main>
     );
   }
@@ -111,10 +111,10 @@ export default function BrowsePage() {
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
             <div>
               <h1 className="font-headline-md text-headline-md text-on-surface font-semibold">
-                {queryParam ? `Suchergebnisse für "${queryParam}"` : (categoryParam === 'All' ? 'Alle Produkte' : categoryParam)}
+                {queryParam ? `Search Results for "${queryParam}"` : (categoryParam === 'All' ? 'All Products' : categoryParam)}
               </h1>
               <p className="text-sm text-on-surface-variant mt-1">
-                {filtered.length} {filtered.length === 1 ? 'Designstück' : 'Designstücke'} kuratiert für dein Zuhause
+                {filtered.length} {filtered.length === 1 ? 'piece' : 'pieces'} curated for your home
               </p>
             </div>
 
@@ -123,7 +123,7 @@ export default function BrowsePage() {
                 onClick={handleClearQuery}
                 className="self-start md:self-auto text-xs px-3 py-1.5 bg-primary/10 text-primary rounded-full hover:bg-primary/20 transition-colors flex items-center gap-1"
               >
-                <span>Filter löschen: {queryParam}</span>
+                <span>Clear filter: {queryParam}</span>
                 <span className="material-symbols-outlined text-sm">close</span>
               </button>
             )}
@@ -143,7 +143,7 @@ export default function BrowsePage() {
                       : 'bg-surface border border-outline-variant/50 text-on-surface hover:bg-surface-container'
                   }`}
                 >
-                  {cat === 'All' ? 'Alle' : cat}
+                  {cat}
                 </button>
               );
             })}
@@ -160,16 +160,16 @@ export default function BrowsePage() {
             </button>
 
             <div className="flex items-center gap-2">
-              <span className="text-xs text-on-surface-variant hidden sm:inline">Sortieren:</span>
+              <span className="text-xs text-on-surface-variant hidden sm:inline">Sort:</span>
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
                 className="bg-surface text-on-surface text-xs font-medium border border-outline-variant/60 rounded-full px-3 py-1.5 outline-none focus:ring-1 focus:ring-primary cursor-pointer"
               >
-                <option value="featured">Empfohlen</option>
-                <option value="price-asc">Preis: Niedrig bis Hoch</option>
-                <option value="price-desc">Preis: Hoch bis Niedrig</option>
-                <option value="name">Alphabetisch (A-Z)</option>
+                <option value="featured">Featured</option>
+                <option value="price-asc">Price: Low to High</option>
+                <option value="price-desc">Price: High to Low</option>
+                <option value="name">Alphabetical (A-Z)</option>
               </select>
             </div>
           </div>
@@ -181,8 +181,8 @@ export default function BrowsePage() {
         {filtered.length === 0 ? (
           <div className="text-center py-16 bg-surface-container-low rounded-2xl p-8">
             <span className="material-symbols-outlined text-4xl text-outline mb-2">search_off</span>
-            <p className="font-headline-sm text-lg text-on-surface mb-2 font-medium">Keine Produkte gefunden</p>
-            <p className="text-sm text-on-surface-variant mb-6">Bitte versuche es mit einem anderen Suchbegriff oder Filter.</p>
+            <p className="font-headline-sm text-lg text-on-surface mb-2 font-medium">No products found</p>
+            <p className="text-sm text-on-surface-variant mb-6">Please try adjusting your search terms or category filter.</p>
             <button
               onClick={() => {
                 searchParams.delete('category');
@@ -191,7 +191,7 @@ export default function BrowsePage() {
               }}
               className="px-6 py-2.5 bg-primary text-on-primary rounded-full text-sm font-medium hover:bg-primary-container transition-colors"
             >
-              Alle Filter zurücksetzen
+              Reset All Filters
             </button>
           </div>
         ) : (
@@ -208,7 +208,7 @@ export default function BrowsePage() {
                   onClick={() => setVisibleCount(prev => prev + 8)}
                   className="border border-outline text-on-surface px-8 py-3 rounded-full font-body-md text-sm font-medium hover:bg-surface-variant transition-colors"
                 >
-                  Mehr laden ({filtered.length - visibleCount} weitere)
+                  Load More ({filtered.length - visibleCount} more)
                 </button>
               </div>
             )}
@@ -221,26 +221,26 @@ export default function BrowsePage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-container-max mx-auto">
           <div className="text-center">
             <h4 className="font-headline-sm text-headline-sm text-on-surface mb-2 font-medium">
-              Persönlich kuratiert
+              Personally Curated
             </h4>
             <p className="text-on-surface-variant font-body-md text-sm">
-              Designauswahl statt unübersichtlicher Masse
+              Curated design selections instead of endless clutter
             </p>
           </div>
           <div className="text-center">
             <h4 className="font-headline-sm text-headline-sm text-on-surface mb-2 font-medium">
-              Sicher einkaufen
+              Secure Shopping
             </h4>
             <p className="text-on-surface-variant font-body-md text-sm">
-              Verlässliche Zahlarten und verschlüsselte Zahlung
+              Trusted payment methods and end-to-end encrypted checkout
             </p>
           </div>
           <div className="text-center">
             <h4 className="font-headline-sm text-headline-sm text-on-surface mb-2 font-medium">
-              Transparent geliefert
+              Transparent Delivery
             </h4>
             <p className="text-on-surface-variant font-body-md text-sm">
-              Lieferzeit direkt am jeweiligen Produkt
+              Clear delivery estimates displayed directly on every product
             </p>
           </div>
         </div>

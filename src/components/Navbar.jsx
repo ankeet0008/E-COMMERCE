@@ -1,14 +1,12 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../data/CartContext';
-import { useProducts } from '../data/ProductsContext';
 
 export default function Navbar() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const { getCount } = useCart();
-  const { categories } = useProducts();
   const count = getCount();
   const navigate = useNavigate();
 
@@ -22,16 +20,16 @@ export default function Navbar() {
   };
 
   const navCategories = [
-    { name: 'Alle Produkte', path: '/browse' },
+    { name: 'All Products', path: '/browse' },
     { name: 'Sofas', path: '/browse?category=Sofas' },
-    { name: 'Sessel', path: '/browse?category=Sessel' },
-    { name: 'Stühle', path: '/browse?category=Stühle' },
-    { name: 'Esstische', path: '/browse?category=Esstische' },
-    { name: 'Teppiche', path: '/browse?category=Teppiche' },
-    { name: 'Spiegel', path: '/browse?category=Spiegel' },
-    { name: 'Aufbewahrung', path: '/browse?category=Aufbewahrung' },
-    { name: 'Betten', path: '/browse?category=Betten' },
-    { name: 'Esstisch-Sets', path: '/browse?category=Esstisch-Sets' },
+    { name: 'Armchairs', path: '/browse?category=Armchairs' },
+    { name: 'Chairs', path: '/browse?category=Chairs' },
+    { name: 'Dining Tables', path: '/browse?category=Dining%20Tables' },
+    { name: 'Rugs', path: '/browse?category=Rugs' },
+    { name: 'Mirrors', path: '/browse?category=Mirrors' },
+    { name: 'Storage', path: '/browse?category=Storage' },
+    { name: 'Beds', path: '/browse?category=Beds' },
+    { name: 'Dining Sets', path: '/browse?category=Dining%20Sets' },
   ];
 
   return (
@@ -49,10 +47,10 @@ export default function Navbar() {
         </div>
 
         {/* Center: Brand Logo */}
-        <div className="absolute left-1/2 -translate-x-1/2">
+        <div className="absolute left-1/2 -translate-x-1/2 text-center">
           <Link to="/" className="inline-block">
-            <span className="font-display-lg text-[28px] md:text-[36px] tracking-tighter text-on-surface font-semibold select-none">
-              SKANVI
+            <span className="font-display-lg text-[22px] sm:text-[26px] md:text-[32px] tracking-tight text-on-surface font-semibold select-none whitespace-nowrap">
+              ANKIT KI DUKAN
             </span>
           </Link>
         </div>
@@ -62,7 +60,7 @@ export default function Navbar() {
           <button 
             onClick={() => setSearchOpen(!searchOpen)}
             className="hover:text-primary transition-colors duration-300 p-2 rounded-full hover:bg-surface-container"
-            aria-label="Suche"
+            aria-label="Search"
           >
             <span className="material-symbols-outlined text-[24px]">search</span>
           </button>
@@ -70,7 +68,7 @@ export default function Navbar() {
           <Link 
             to="/cart"
             className="hover:text-primary transition-colors duration-300 relative p-2 rounded-full hover:bg-surface-container flex items-center justify-center"
-            aria-label="Warenkorb"
+            aria-label="Shopping Bag"
           >
             <span className="material-symbols-outlined text-[24px]">shopping_bag</span>
             {count > 0 && (
@@ -94,7 +92,7 @@ export default function Navbar() {
           >
             <div>
               <div className="flex justify-between items-center pb-6 border-b border-outline-variant/40">
-                <span className="font-display-lg text-2xl font-bold tracking-tighter text-on-surface">SKANVI</span>
+                <span className="font-display-lg text-xl font-bold tracking-tight text-on-surface">ANKIT KI DUKAN</span>
                 <button 
                   onClick={() => setDrawerOpen(false)}
                   className="p-2 text-on-surface-variant hover:text-primary rounded-full hover:bg-surface-container"
@@ -105,15 +103,15 @@ export default function Navbar() {
 
               <div className="py-6">
                 <p className="font-label-caps text-label-caps text-on-surface-variant uppercase mb-4 tracking-wider">
-                  Kategorien
+                  Departments
                 </p>
-                <nav className="flex flex-col gap-3">
+                <nav className="flex flex-col gap-2.5">
                   {navCategories.map((cat) => (
                     <Link
                       key={cat.name}
                       to={cat.path}
                       onClick={() => setDrawerOpen(false)}
-                      className="font-headline-sm text-[17px] text-on-surface hover:text-primary py-2 px-3 rounded-lg hover:bg-surface-container flex items-center justify-between transition-colors"
+                      className="font-headline-sm text-[16px] text-on-surface hover:text-primary py-2 px-3 rounded-lg hover:bg-surface-container flex items-center justify-between transition-colors"
                     >
                       <span>{cat.name}</span>
                       <span className="material-symbols-outlined text-sm text-outline">chevron_right</span>
@@ -124,8 +122,8 @@ export default function Navbar() {
             </div>
 
             <div className="pt-6 border-t border-outline-variant/30 text-sm text-on-surface-variant">
-              <p className="font-medium text-on-surface mb-1">Skanvi Living</p>
-              <p className="text-xs text-secondary">Räume, die sich nach dir anfühlen. Editorial Minimalism for Slow Living.</p>
+              <p className="font-medium text-on-surface mb-1">Ankit Ki Dukan</p>
+              <p className="text-xs text-secondary">Spaces that feel like you. Curated minimalism for modern living.</p>
             </div>
           </div>
         </div>
@@ -143,7 +141,7 @@ export default function Navbar() {
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Wonach suchst du? (z.B. Sofa, Sessel, Teppich, Spiegel)..."
+                placeholder="What are you looking for? (e.g. Sofa, Armchair, Rug, Mirror)..."
                 className="w-full pl-12 pr-28 py-3.5 bg-surface-container rounded-full text-on-surface placeholder:text-on-surface-variant/60 outline-none focus:ring-2 focus:ring-primary text-sm md:text-base border border-transparent"
                 autoFocus
               />
@@ -151,7 +149,7 @@ export default function Navbar() {
                 type="submit"
                 className="absolute right-2 px-5 py-2 bg-primary text-on-primary rounded-full text-sm font-medium hover:bg-primary-container transition-colors"
               >
-                Suchen
+                Search
               </button>
             </form>
           </div>

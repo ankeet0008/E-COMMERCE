@@ -6,11 +6,11 @@ export default function Footer() {
       {/* Col 1: Brand Info */}
       <div className="flex flex-col gap-6 col-span-1 md:col-span-1">
         <h2 className="font-headline-sm text-headline-sm text-on-surface font-bold tracking-tight">
-          SKANVI
+          ANKIT KI DUKAN
         </h2>
         <p className="font-body-md text-body-md text-secondary pr-4 leading-relaxed">
-          Design, das bleibt.<br />
-          Skandinavisch inspirierte Möbel und Wohnaccessoires für Räume mit Ruhe, Wärme und Charakter.
+          Design that lasts.<br />
+          Thoughtfully curated furniture and home decor for spaces with warmth, calm, and personality.
         </p>
         <div className="flex gap-4 mt-2">
           <a href="#" className="text-on-secondary-fixed-variant hover:text-primary transition-colors duration-200" aria-label="Instagram">
@@ -22,83 +22,83 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* Col 2: Produkte */}
+      {/* Col 2: Products */}
       <div className="flex flex-col gap-3">
         <h3 className="font-label-caps text-label-caps text-on-surface uppercase mb-2">
-          Produkte
+          Products
         </h3>
         <Link to="/browse?category=Sofas" className="font-body-md text-body-md text-on-secondary-fixed-variant hover:text-primary transition-colors duration-200">
-          Möbel & Sofas
+          Sofas & Modular
         </Link>
-        <Link to="/browse?category=Sessel" className="font-body-md text-body-md text-on-secondary-fixed-variant hover:text-primary transition-colors duration-200">
-          Sessel & Lounge
+        <Link to="/browse?category=Armchairs" className="font-body-md text-body-md text-on-secondary-fixed-variant hover:text-primary transition-colors duration-200">
+          Armchairs & Lounge
         </Link>
-        <Link to="/browse?category=Teppiche" className="font-body-md text-body-md text-on-secondary-fixed-variant hover:text-primary transition-colors duration-200">
-          Teppiche
+        <Link to="/browse?category=Rugs" className="font-body-md text-body-md text-on-secondary-fixed-variant hover:text-primary transition-colors duration-200">
+          Wool & Floor Rugs
         </Link>
-        <Link to="/browse?category=Esstische" className="font-body-md text-body-md text-on-secondary-fixed-variant hover:text-primary transition-colors duration-200">
-          Esstische
+        <Link to="/browse?category=Dining%20Tables" className="font-body-md text-body-md text-on-secondary-fixed-variant hover:text-primary transition-colors duration-200">
+          Dining Tables
         </Link>
-        <Link to="/browse?category=Spiegel" className="font-body-md text-body-md text-on-secondary-fixed-variant hover:text-primary transition-colors duration-200">
-          Spiegel
+        <Link to="/browse?category=Mirrors" className="font-body-md text-body-md text-on-secondary-fixed-variant hover:text-primary transition-colors duration-200">
+          Mirrors & Decor
         </Link>
-        <Link to="/browse?category=Aufbewahrung" className="font-body-md text-body-md text-on-secondary-fixed-variant hover:text-primary transition-colors duration-200">
-          Aufbewahrung
-        </Link>
-      </div>
-
-      {/* Col 3: Skanvi */}
-      <div className="flex flex-col gap-3">
-        <h3 className="font-label-caps text-label-caps text-on-surface uppercase mb-2">
-          Skanvi
-        </h3>
-        <Link to="/browse" className="font-body-md text-body-md text-on-secondary-fixed-variant hover:text-primary transition-colors duration-200">
-          Über uns
-        </Link>
-        <Link to="/browse" className="font-body-md text-body-md text-on-secondary-fixed-variant hover:text-primary transition-colors duration-200">
-          Kuratierte Räume
-        </Link>
-        <Link to="/browse" className="font-body-md text-body-md text-on-secondary-fixed-variant hover:text-primary transition-colors duration-200">
-          Nachhaltigkeit
-        </Link>
-        <Link to="/browse" className="font-body-md text-body-md text-on-secondary-fixed-variant hover:text-primary transition-colors duration-200">
-          Kontakt & FAQ
+        <Link to="/browse?category=Storage" className="font-body-md text-body-md text-on-secondary-fixed-variant hover:text-primary transition-colors duration-200">
+          Storage & Cabinets
         </Link>
       </div>
 
-      {/* Col 4: Hilfe */}
+      {/* Col 3: About */}
       <div className="flex flex-col gap-3">
         <h3 className="font-label-caps text-label-caps text-on-surface uppercase mb-2">
-          Hilfe
+          About
         </h3>
         <Link to="/browse" className="font-body-md text-body-md text-on-secondary-fixed-variant hover:text-primary transition-colors duration-200">
-          Sendungsverfolgung
+          Our Story
         </Link>
         <Link to="/browse" className="font-body-md text-body-md text-on-secondary-fixed-variant hover:text-primary transition-colors duration-200">
-          Vertrag widerrufen
+          Curated Spaces
         </Link>
         <Link to="/browse" className="font-body-md text-body-md text-on-secondary-fixed-variant hover:text-primary transition-colors duration-200">
-          Lieferzeiten
+          Sustainability
         </Link>
         <Link to="/browse" className="font-body-md text-body-md text-on-secondary-fixed-variant hover:text-primary transition-colors duration-200">
-          Retoure
+          Contact & FAQ
+        </Link>
+      </div>
+
+      {/* Col 4: Help */}
+      <div className="flex flex-col gap-3">
+        <h3 className="font-label-caps text-label-caps text-on-surface uppercase mb-2">
+          Help & Support
+        </h3>
+        <Link to="/browse" className="font-body-md text-body-md text-on-secondary-fixed-variant hover:text-primary transition-colors duration-200">
+          Track Your Order
+        </Link>
+        <Link to="/browse" className="font-body-md text-body-md text-on-secondary-fixed-variant hover:text-primary transition-colors duration-200">
+          Shipping & Delivery
+        </Link>
+        <Link to="/browse" className="font-body-md text-body-md text-on-secondary-fixed-variant hover:text-primary transition-colors duration-200">
+          Returns & Exchanges
+        </Link>
+        <Link to="/browse" className="font-body-md text-body-md text-on-secondary-fixed-variant hover:text-primary transition-colors duration-200">
+          Warranty & Care
         </Link>
       </div>
 
       {/* Bottom Row */}
       <div className="col-span-1 md:col-span-4 mt-12 pt-8 border-t border-outline-variant/30 flex flex-col md:flex-row justify-between items-center gap-4">
         <p className="font-body-md text-body-md text-[14px] text-secondary">
-          © 2026 Skanvi Living. Editorial Minimalism for Slow Living.
+          © 2026 Ankit Ki Dukan. Editorial Minimalism for Modern Living.
         </p>
         <div className="flex gap-6">
           <Link to="/browse" className="font-body-md text-body-md text-[14px] text-on-secondary-fixed-variant hover:text-primary transition-colors duration-200">
-            Impressum
+            Terms & Conditions
           </Link>
           <Link to="/browse" className="font-body-md text-body-md text-[14px] text-on-secondary-fixed-variant hover:text-primary transition-colors duration-200">
-            Datenschutz
+            Privacy Policy
           </Link>
           <Link to="/browse" className="font-body-md text-body-md text-[14px] text-on-secondary-fixed-variant hover:text-primary transition-colors duration-200">
-            AGB
+            Imprint
           </Link>
         </div>
       </div>

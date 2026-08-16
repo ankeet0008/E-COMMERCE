@@ -28,20 +28,20 @@ export default function ProductPage() {
   if (!product) {
     return (
       <main className="pt-36 pb-24 text-center px-4 max-w-lg mx-auto">
-        <h1 className="font-headline-md text-2xl mb-3 font-medium">Produkt nicht gefunden</h1>
-        <p className="text-on-surface-variant mb-6">Dieses Produkt ist nicht mehr im aktuellen Katalog verfügbar.</p>
+        <h1 className="font-headline-md text-2xl mb-3 font-medium">Product Not Found</h1>
+        <p className="text-on-surface-variant mb-6">This item is currently not available in our catalog.</p>
         <Link 
           to="/browse"
           className="inline-flex px-8 py-3 bg-primary text-on-primary rounded-full font-medium hover:bg-primary-container transition-colors"
         >
-          Zurück zur Kollektion
+          Return to Collection
         </Link>
       </main>
     );
   }
 
   const price = product.sale ? product.salePrice : product.price;
-  const isOutOfStock = product.stock === 0 || product.status === 'Ausverkauft';
+  const isOutOfStock = product.stock === 0 || product.status === 'Out of Stock';
   const galleryImages = product.images && product.images.length > 0 ? product.images : [product.image];
   const related = getProductsByCategory(product.category)
     .filter(p => p.id !== product.id)
@@ -82,7 +82,7 @@ export default function ProductPage() {
               />
               <div className="absolute top-4 left-4 bg-surface/85 backdrop-blur-md px-3 py-1 rounded-full text-xs font-semibold tracking-wider uppercase">
                 <span className={isOutOfStock ? 'text-status-oos' : 'text-status-available'}>
-                  {isOutOfStock ? 'Ausverkauft' : 'Lieferbar'}
+                  {isOutOfStock ? 'Out of Stock' : 'In Stock'}
                 </span>
               </div>
             </div>
@@ -116,14 +116,14 @@ export default function ProductPage() {
             
             <div className="flex items-baseline gap-3 mb-6">
               <span className="font-headline-md text-2xl md:text-3xl font-medium text-on-surface">
-                {product.category === 'Sofas' ? 'Ab ' : ''}{formatPrice(price)}
+                {product.category === 'Sofas' ? 'From ' : ''}{formatPrice(price)}
               </span>
               {product.sale && (
                 <span className="text-sm text-on-surface-variant line-through">
                   {formatPrice(product.price)}
                 </span>
               )}
-              <span className="text-xs text-on-surface-variant/80">inkl. MwSt.</span>
+              <span className="text-xs text-on-surface-variant/80">incl. Taxes</span>
             </div>
 
             <p className="font-body-md text-body-md text-on-surface-variant mb-8 leading-relaxed">
@@ -133,21 +133,21 @@ export default function ProductPage() {
             {/* Product Specifications Table */}
             <div className="border-t border-b border-outline-variant/40 py-4 mb-8 flex flex-col gap-2 text-sm">
               <div className="flex justify-between py-1">
-                <span className="text-on-surface-variant">Artikelnummer</span>
+                <span className="text-on-surface-variant">Item SKU</span>
                 <span className="font-medium text-on-surface">{product.sku}</span>
               </div>
               <div className="flex justify-between py-1">
-                <span className="text-on-surface-variant">Maße</span>
+                <span className="text-on-surface-variant">Dimensions</span>
                 <span className="font-medium text-on-surface">{product.dimensions || '—'}</span>
               </div>
               <div className="flex justify-between py-1">
-                <span className="text-on-surface-variant">Gewicht</span>
+                <span className="text-on-surface-variant">Weight</span>
                 <span className="font-medium text-on-surface">{product.weight || '—'}</span>
               </div>
               <div className="flex justify-between py-1">
-                <span className="text-on-surface-variant">Verfügbarkeit</span>
+                <span className="text-on-surface-variant">Availability</span>
                 <span className={`font-medium ${isOutOfStock ? 'text-status-oos' : 'text-status-available'}`}>
-                  {isOutOfStock ? 'Momentan vergriffen' : 'Auf Lager (Lieferzeit 3-5 Werktage)'}
+                  {isOutOfStock ? 'Currently Out of Stock' : 'In Stock (Ships in 3-5 business days)'}
                 </span>
               </div>
             </div>
@@ -158,7 +158,7 @@ export default function ProductPage() {
                 <button
                   onClick={() => setQty(q => Math.max(1, q - 1))}
                   className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-surface text-on-surface font-medium"
-                  aria-label="Menge verringern"
+                  aria-label="Decrease quantity"
                 >
                   −
                 </button>
@@ -166,7 +166,7 @@ export default function ProductPage() {
                 <button
                   onClick={() => setQty(q => q + 1)}
                   className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-surface text-on-surface font-medium"
-                  aria-label="Menge erhöhen"
+                  aria-label="Increase quantity"
                 >
                   +
                 </button>
@@ -182,12 +182,12 @@ export default function ProductPage() {
                 }`}
               >
                 <span className="material-symbols-outlined text-xl">shopping_bag</span>
-                <span>{isOutOfStock ? 'Ausverkauft' : `In den Warenkorb — ${formatPrice(price * qty)}`}</span>
+                <span>{isOutOfStock ? 'Out of Stock' : `Add to Bag — ${formatPrice(price * qty)}`}</span>
               </button>
 
               <button
                 onClick={() => setIsWishlisted(!isWishlisted)}
-                aria-label="Wunschliste"
+                aria-label="Wishlist"
                 className="w-12 h-12 rounded-full border border-outline-variant/50 flex items-center justify-center hover:bg-surface-container transition-colors"
               >
                 <span className={`material-symbols-outlined text-xl ${isWishlisted ? 'fill text-[#93000a]' : 'text-on-surface'}`}>
@@ -200,8 +200,8 @@ export default function ProductPage() {
             {addedToast && (
               <div className="p-3 bg-[#e5f2df] text-primary rounded-xl text-sm font-medium flex items-center gap-2 mb-6 animate-fade-in">
                 <span className="material-symbols-outlined text-base">check_circle</span>
-                <span>Artikel wurde zum Warenkorb hinzugefügt!</span>
-                <Link to="/cart" className="underline font-bold ml-auto">Zum Warenkorb →</Link>
+                <span>Item added to your shopping bag!</span>
+                <Link to="/cart" className="underline font-bold ml-auto">View Bag →</Link>
               </div>
             )}
 
@@ -209,15 +209,15 @@ export default function ProductPage() {
             <div className="bg-surface-container-low p-4 rounded-xl flex flex-col gap-2 text-xs text-on-surface-variant">
               <div className="flex items-center gap-2">
                 <span className="material-symbols-outlined text-base text-primary">local_shipping</span>
-                <span>Kostenloser Standardversand ab 200 €</span>
+                <span>Free standard delivery on orders over $200</span>
               </div>
               <div className="flex items-center gap-2">
                 <span className="material-symbols-outlined text-base text-primary">published_with_changes</span>
-                <span>30 Tage unkomplizierte Rückgabe</span>
+                <span>30-day hassle-free returns</span>
               </div>
               <div className="flex items-center gap-2">
                 <span className="material-symbols-outlined text-base text-primary">shield_check</span>
-                <span>Sicher verschlüsselte Zahlung</span>
+                <span>End-to-end encrypted safe payment</span>
               </div>
             </div>
           </div>
@@ -228,10 +228,10 @@ export default function ProductPage() {
           <div className="pt-16 border-t border-outline-variant/30">
             <div className="mb-8">
               <p className="font-label-caps text-label-caps text-on-surface-variant uppercase mb-2">
-                DAS KÖNNTE DIR AUCH GEFALLEN
+                YOU MAY ALSO LIKE
               </p>
               <h2 className="font-headline-md text-2xl font-medium text-on-surface">
-                Passende Lieblingsstücke
+                Complementary Favorites
               </h2>
             </div>
 

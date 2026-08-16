@@ -40,25 +40,25 @@ export default function CartPage() {
         {/* Header */}
         <div className="mb-10">
           <p className="font-label-caps text-label-caps text-on-surface-variant uppercase mb-2">
-            DEINE AUSWAHL
+            YOUR SELECTION
           </p>
           <h1 className="font-display-lg-mobile text-3xl md:text-4xl font-medium text-on-surface">
-            Warenkorb ({count})
+            Shopping Bag ({count})
           </h1>
         </div>
 
         {items.length === 0 ? (
           <div className="text-center py-20 bg-surface-container-low rounded-3xl p-8 max-w-xl mx-auto">
             <span className="material-symbols-outlined text-5xl text-outline mb-4">shopping_bag</span>
-            <h2 className="font-headline-md text-xl font-medium text-on-surface mb-2">Dein Warenkorb ist leer</h2>
+            <h2 className="font-headline-md text-xl font-medium text-on-surface mb-2">Your shopping bag is empty</h2>
             <p className="text-sm text-on-surface-variant mb-8">
-              Entdecke handverlesene Möbel und Accessoires für dein Zuhause.
+              Explore hand-selected furniture and accessories curated for your home.
             </p>
             <Link
               to="/browse"
               className="inline-flex px-8 py-3.5 bg-primary text-on-primary rounded-full font-medium hover:bg-primary-container transition-colors shadow-sm"
             >
-              Kollektion entdecken
+              Explore Collection
             </Link>
           </div>
         ) : (
@@ -101,7 +101,7 @@ export default function CartPage() {
                           </span>
                         </div>
                         <p className="text-xs text-on-surface-variant mt-1">
-                          Einzelpreis: {formatPrice(price)}
+                          Unit price: {formatPrice(price)}
                         </p>
                       </div>
 
@@ -111,7 +111,7 @@ export default function CartPage() {
                           <button
                             onClick={() => updateQty(product.id, item.qty - 1)}
                             className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-surface text-on-surface text-sm"
-                            aria-label="Menge reduzieren"
+                            aria-label="Decrease quantity"
                           >
                             −
                           </button>
@@ -119,7 +119,7 @@ export default function CartPage() {
                           <button
                             onClick={() => updateQty(product.id, item.qty + 1)}
                             className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-surface text-on-surface text-sm"
-                            aria-label="Menge erhöhen"
+                            aria-label="Increase quantity"
                           >
                             +
                           </button>
@@ -131,7 +131,7 @@ export default function CartPage() {
                           className="text-xs text-on-surface-variant hover:text-error flex items-center gap-1 transition-colors"
                         >
                           <span className="material-symbols-outlined text-base">delete</span>
-                          <span className="hidden sm:inline">Entfernen</span>
+                          <span className="hidden sm:inline">Remove</span>
                         </button>
                       </div>
                     </div>
@@ -143,21 +143,21 @@ export default function CartPage() {
             {/* Order Summary (Right 4 Cols) */}
             <div className="lg:col-span-4 bg-surface-container-low p-6 md:p-8 rounded-3xl border border-outline-variant/30 sticky top-28">
               <h2 className="font-headline-sm text-lg font-semibold text-on-surface mb-6 pb-4 border-b border-outline-variant/40">
-                Bestellübersicht
+                Order Summary
               </h2>
 
               {/* Coupon Form */}
               <div className="mb-6">
                 {coupon ? (
                   <div className="p-3 bg-[#e5f2df] rounded-xl flex justify-between items-center text-xs text-primary font-medium">
-                    <span>Gutschein aktiv: <strong>{coupon}</strong></span>
-                    <button onClick={removeCoupon} className="hover:underline text-error">Entfernen</button>
+                    <span>Promo active: <strong>{coupon}</strong></span>
+                    <button onClick={removeCoupon} className="hover:underline text-error">Remove</button>
                   </div>
                 ) : (
                   <form onSubmit={handleApplyCoupon} className="flex gap-2">
                     <input
                       type="text"
-                      placeholder="Gutscheincode (z.B. SKANVI15)"
+                      placeholder="Promo code (e.g. ANKIT15)"
                       value={couponInput}
                       onChange={(e) => { setCouponInput(e.target.value); setCouponError(false); }}
                       className="flex-1 px-4 py-2.5 bg-surface text-on-surface text-xs rounded-full border border-outline-variant/60 outline-none focus:ring-1 focus:ring-primary"
@@ -166,45 +166,45 @@ export default function CartPage() {
                       type="submit"
                       className="px-4 py-2.5 bg-primary text-on-primary rounded-full text-xs font-medium hover:bg-primary-container transition-colors"
                     >
-                      Einlösen
+                      Apply
                     </button>
                   </form>
                 )}
                 {couponError && (
-                  <p className="text-xs text-error mt-1 pl-2">Ungültiger Gutscheincode</p>
+                  <p className="text-xs text-error mt-1 pl-2">Invalid promotional code</p>
                 )}
               </div>
 
               {/* Cost Calculations */}
               <div className="flex flex-col gap-3 text-sm border-b border-outline-variant/40 pb-6 mb-6">
                 <div className="flex justify-between text-on-surface-variant">
-                  <span>Zwischensumme</span>
+                  <span>Subtotal</span>
                   <span className="text-on-surface font-medium">{formatPrice(subtotal)}</span>
                 </div>
 
                 {discountAmount > 0 && (
                   <div className="flex justify-between text-primary">
-                    <span>Rabatt</span>
+                    <span>Discount</span>
                     <span className="font-medium">-{formatPrice(discountAmount)}</span>
                   </div>
                 )}
 
                 <div className="flex justify-between text-on-surface-variant">
-                  <span>Versandkosten</span>
+                  <span>Shipping</span>
                   <span className="text-on-surface font-medium">
-                    {shipping === 0 ? 'Kostenlos' : formatPrice(shipping)}
+                    {shipping === 0 ? 'Free' : formatPrice(shipping)}
                   </span>
                 </div>
 
                 <div className="flex justify-between text-on-surface-variant text-xs">
-                  <span>inkl. 19% MwSt.</span>
+                  <span>incl. Taxes (GST 18%)</span>
                   <span>{formatPrice(gstAmount)}</span>
                 </div>
               </div>
 
               {/* Total */}
               <div className="flex justify-between items-baseline mb-8">
-                <span className="font-headline-sm text-base font-semibold text-on-surface">Gesamtbetrag</span>
+                <span className="font-headline-sm text-base font-semibold text-on-surface">Total Amount</span>
                 <span className="font-headline-md text-2xl font-bold text-on-surface">
                   {formatPrice(grandTotal)}
                 </span>
@@ -215,12 +215,12 @@ export default function CartPage() {
                 to="/checkout"
                 className="w-full py-4 bg-primary text-on-primary text-center rounded-full font-medium hover:bg-primary-container transition-colors shadow-sm block text-sm"
               >
-                Zur Kasse gehen
+                Proceed to Checkout
               </Link>
 
               <div className="mt-4 text-center">
                 <Link to="/browse" className="text-xs text-on-surface-variant hover:text-primary underline">
-                  Weiter einkaufen
+                  Continue shopping
                 </Link>
               </div>
             </div>
